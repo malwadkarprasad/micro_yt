@@ -1,0 +1,3012 @@
+Subject: [PATCH] Quiz and Question services added and added service regisrty
+---
+Index: QuestionService/QuestionService/.gitignore
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/QuestionService/QuestionService/.gitignore b/QuestionService/QuestionService/.gitignore
+new file mode 100644
+--- /dev/null	(revision a3588635740a06a8946ec51f6c69167ea2d62060)
++++ b/QuestionService/QuestionService/.gitignore	(revision a3588635740a06a8946ec51f6c69167ea2d62060)
+@@ -0,0 +1,33 @@
++HELP.md
++target/
++!.mvn/wrapper/maven-wrapper.jar
++!**/src/main/**/target/
++!**/src/test/**/target/
++
++### STS ###
++.apt_generated
++.classpath
++.factorypath
++.project
++.settings
++.springBeans
++.sts4-cache
++
++### IntelliJ IDEA ###
++.idea
++*.iws
++*.iml
++*.ipr
++
++### NetBeans ###
++/nbproject/private/
++/nbbuild/
++/dist/
++/nbdist/
++/.nb-gradle/
++build/
++!**/src/main/**/build/
++!**/src/test/**/build/
++
++### VS Code ###
++.vscode/
+Index: QuestionService/QuestionService/.mvn/wrapper/maven-wrapper.properties
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>ISO-8859-1
+===================================================================
+diff --git a/QuestionService/QuestionService/.mvn/wrapper/maven-wrapper.properties b/QuestionService/QuestionService/.mvn/wrapper/maven-wrapper.properties
+new file mode 100644
+--- /dev/null	(revision a3588635740a06a8946ec51f6c69167ea2d62060)
++++ b/QuestionService/QuestionService/.mvn/wrapper/maven-wrapper.properties	(revision a3588635740a06a8946ec51f6c69167ea2d62060)
+@@ -0,0 +1,19 @@
++# Licensed to the Apache Software Foundation (ASF) under one
++# or more contributor license agreements.  See the NOTICE file
++# distributed with this work for additional information
++# regarding copyright ownership.  The ASF licenses this file
++# to you under the Apache License, Version 2.0 (the
++# "License"); you may not use this file except in compliance
++# with the License.  You may obtain a copy of the License at
++#
++#   https://www.apache.org/licenses/LICENSE-2.0
++#
++# Unless required by applicable law or agreed to in writing,
++# software distributed under the License is distributed on an
++# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
++# KIND, either express or implied.  See the License for the
++# specific language governing permissions and limitations
++# under the License.
++wrapperVersion=3.3.2
++distributionType=only-script
++distributionUrl=https://repo.maven.apache.org/maven2/org/apache/maven/apache-maven/3.9.7/apache-maven-3.9.7-bin.zip
+Index: QuestionService/QuestionService/mvnw
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/QuestionService/QuestionService/mvnw b/QuestionService/QuestionService/mvnw
+new file mode 100644
+--- /dev/null	(revision a3588635740a06a8946ec51f6c69167ea2d62060)
++++ b/QuestionService/QuestionService/mvnw	(revision a3588635740a06a8946ec51f6c69167ea2d62060)
+@@ -0,0 +1,259 @@
++#!/bin/sh
++# ----------------------------------------------------------------------------
++# Licensed to the Apache Software Foundation (ASF) under one
++# or more contributor license agreements.  See the NOTICE file
++# distributed with this work for additional information
++# regarding copyright ownership.  The ASF licenses this file
++# to you under the Apache License, Version 2.0 (the
++# "License"); you may not use this file except in compliance
++# with the License.  You may obtain a copy of the License at
++#
++#    https://www.apache.org/licenses/LICENSE-2.0
++#
++# Unless required by applicable law or agreed to in writing,
++# software distributed under the License is distributed on an
++# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
++# KIND, either express or implied.  See the License for the
++# specific language governing permissions and limitations
++# under the License.
++# ----------------------------------------------------------------------------
++
++# ----------------------------------------------------------------------------
++# Apache Maven Wrapper startup batch script, version 3.3.2
++#
++# Optional ENV vars
++# -----------------
++#   JAVA_HOME - location of a JDK home dir, required when download maven via java source
++#   MVNW_REPOURL - repo url base for downloading maven distribution
++#   MVNW_USERNAME/MVNW_PASSWORD - user and password for downloading maven
++#   MVNW_VERBOSE - true: enable verbose log; debug: trace the mvnw script; others: silence the output
++# ----------------------------------------------------------------------------
++
++set -euf
++[ "${MVNW_VERBOSE-}" != debug ] || set -x
++
++# OS specific support.
++native_path() { printf %s\\n "$1"; }
++case "$(uname)" in
++CYGWIN* | MINGW*)
++  [ -z "${JAVA_HOME-}" ] || JAVA_HOME="$(cygpath --unix "$JAVA_HOME")"
++  native_path() { cygpath --path --windows "$1"; }
++  ;;
++esac
++
++# set JAVACMD and JAVACCMD
++set_java_home() {
++  # For Cygwin and MinGW, ensure paths are in Unix format before anything is touched
++  if [ -n "${JAVA_HOME-}" ]; then
++    if [ -x "$JAVA_HOME/jre/sh/java" ]; then
++      # IBM's JDK on AIX uses strange locations for the executables
++      JAVACMD="$JAVA_HOME/jre/sh/java"
++      JAVACCMD="$JAVA_HOME/jre/sh/javac"
++    else
++      JAVACMD="$JAVA_HOME/bin/java"
++      JAVACCMD="$JAVA_HOME/bin/javac"
++
++      if [ ! -x "$JAVACMD" ] || [ ! -x "$JAVACCMD" ]; then
++        echo "The JAVA_HOME environment variable is not defined correctly, so mvnw cannot run." >&2
++        echo "JAVA_HOME is set to \"$JAVA_HOME\", but \"\$JAVA_HOME/bin/java\" or \"\$JAVA_HOME/bin/javac\" does not exist." >&2
++        return 1
++      fi
++    fi
++  else
++    JAVACMD="$(
++      'set' +e
++      'unset' -f command 2>/dev/null
++      'command' -v java
++    )" || :
++    JAVACCMD="$(
++      'set' +e
++      'unset' -f command 2>/dev/null
++      'command' -v javac
++    )" || :
++
++    if [ ! -x "${JAVACMD-}" ] || [ ! -x "${JAVACCMD-}" ]; then
++      echo "The java/javac command does not exist in PATH nor is JAVA_HOME set, so mvnw cannot run." >&2
++      return 1
++    fi
++  fi
++}
++
++# hash string like Java String::hashCode
++hash_string() {
++  str="${1:-}" h=0
++  while [ -n "$str" ]; do
++    char="${str%"${str#?}"}"
++    h=$(((h * 31 + $(LC_CTYPE=C printf %d "'$char")) % 4294967296))
++    str="${str#?}"
++  done
++  printf %x\\n $h
++}
++
++verbose() { :; }
++[ "${MVNW_VERBOSE-}" != true ] || verbose() { printf %s\\n "${1-}"; }
++
++die() {
++  printf %s\\n "$1" >&2
++  exit 1
++}
++
++trim() {
++  # MWRAPPER-139:
++  #   Trims trailing and leading whitespace, carriage returns, tabs, and linefeeds.
++  #   Needed for removing poorly interpreted newline sequences when running in more
++  #   exotic environments such as mingw bash on Windows.
++  printf "%s" "${1}" | tr -d '[:space:]'
++}
++
++# parse distributionUrl and optional distributionSha256Sum, requires .mvn/wrapper/maven-wrapper.properties
++while IFS="=" read -r key value; do
++  case "${key-}" in
++  distributionUrl) distributionUrl=$(trim "${value-}") ;;
++  distributionSha256Sum) distributionSha256Sum=$(trim "${value-}") ;;
++  esac
++done <"${0%/*}/.mvn/wrapper/maven-wrapper.properties"
++[ -n "${distributionUrl-}" ] || die "cannot read distributionUrl property in ${0%/*}/.mvn/wrapper/maven-wrapper.properties"
++
++case "${distributionUrl##*/}" in
++maven-mvnd-*bin.*)
++  MVN_CMD=mvnd.sh _MVNW_REPO_PATTERN=/maven/mvnd/
++  case "${PROCESSOR_ARCHITECTURE-}${PROCESSOR_ARCHITEW6432-}:$(uname -a)" in
++  *AMD64:CYGWIN* | *AMD64:MINGW*) distributionPlatform=windows-amd64 ;;
++  :Darwin*x86_64) distributionPlatform=darwin-amd64 ;;
++  :Darwin*arm64) distributionPlatform=darwin-aarch64 ;;
++  :Linux*x86_64*) distributionPlatform=linux-amd64 ;;
++  *)
++    echo "Cannot detect native platform for mvnd on $(uname)-$(uname -m), use pure java version" >&2
++    distributionPlatform=linux-amd64
++    ;;
++  esac
++  distributionUrl="${distributionUrl%-bin.*}-$distributionPlatform.zip"
++  ;;
++maven-mvnd-*) MVN_CMD=mvnd.sh _MVNW_REPO_PATTERN=/maven/mvnd/ ;;
++*) MVN_CMD="mvn${0##*/mvnw}" _MVNW_REPO_PATTERN=/org/apache/maven/ ;;
++esac
++
++# apply MVNW_REPOURL and calculate MAVEN_HOME
++# maven home pattern: ~/.m2/wrapper/dists/{apache-maven-<version>,maven-mvnd-<version>-<platform>}/<hash>
++[ -z "${MVNW_REPOURL-}" ] || distributionUrl="$MVNW_REPOURL$_MVNW_REPO_PATTERN${distributionUrl#*"$_MVNW_REPO_PATTERN"}"
++distributionUrlName="${distributionUrl##*/}"
++distributionUrlNameMain="${distributionUrlName%.*}"
++distributionUrlNameMain="${distributionUrlNameMain%-bin}"
++MAVEN_USER_HOME="${MAVEN_USER_HOME:-${HOME}/.m2}"
++MAVEN_HOME="${MAVEN_USER_HOME}/wrapper/dists/${distributionUrlNameMain-}/$(hash_string "$distributionUrl")"
++
++exec_maven() {
++  unset MVNW_VERBOSE MVNW_USERNAME MVNW_PASSWORD MVNW_REPOURL || :
++  exec "$MAVEN_HOME/bin/$MVN_CMD" "$@" || die "cannot exec $MAVEN_HOME/bin/$MVN_CMD"
++}
++
++if [ -d "$MAVEN_HOME" ]; then
++  verbose "found existing MAVEN_HOME at $MAVEN_HOME"
++  exec_maven "$@"
++fi
++
++case "${distributionUrl-}" in
++*?-bin.zip | *?maven-mvnd-?*-?*.zip) ;;
++*) die "distributionUrl is not valid, must match *-bin.zip or maven-mvnd-*.zip, but found '${distributionUrl-}'" ;;
++esac
++
++# prepare tmp dir
++if TMP_DOWNLOAD_DIR="$(mktemp -d)" && [ -d "$TMP_DOWNLOAD_DIR" ]; then
++  clean() { rm -rf -- "$TMP_DOWNLOAD_DIR"; }
++  trap clean HUP INT TERM EXIT
++else
++  die "cannot create temp dir"
++fi
++
++mkdir -p -- "${MAVEN_HOME%/*}"
++
++# Download and Install Apache Maven
++verbose "Couldn't find MAVEN_HOME, downloading and installing it ..."
++verbose "Downloading from: $distributionUrl"
++verbose "Downloading to: $TMP_DOWNLOAD_DIR/$distributionUrlName"
++
++# select .zip or .tar.gz
++if ! command -v unzip >/dev/null; then
++  distributionUrl="${distributionUrl%.zip}.tar.gz"
++  distributionUrlName="${distributionUrl##*/}"
++fi
++
++# verbose opt
++__MVNW_QUIET_WGET=--quiet __MVNW_QUIET_CURL=--silent __MVNW_QUIET_UNZIP=-q __MVNW_QUIET_TAR=''
++[ "${MVNW_VERBOSE-}" != true ] || __MVNW_QUIET_WGET='' __MVNW_QUIET_CURL='' __MVNW_QUIET_UNZIP='' __MVNW_QUIET_TAR=v
++
++# normalize http auth
++case "${MVNW_PASSWORD:+has-password}" in
++'') MVNW_USERNAME='' MVNW_PASSWORD='' ;;
++has-password) [ -n "${MVNW_USERNAME-}" ] || MVNW_USERNAME='' MVNW_PASSWORD='' ;;
++esac
++
++if [ -z "${MVNW_USERNAME-}" ] && command -v wget >/dev/null; then
++  verbose "Found wget ... using wget"
++  wget ${__MVNW_QUIET_WGET:+"$__MVNW_QUIET_WGET"} "$distributionUrl" -O "$TMP_DOWNLOAD_DIR/$distributionUrlName" || die "wget: Failed to fetch $distributionUrl"
++elif [ -z "${MVNW_USERNAME-}" ] && command -v curl >/dev/null; then
++  verbose "Found curl ... using curl"
++  curl ${__MVNW_QUIET_CURL:+"$__MVNW_QUIET_CURL"} -f -L -o "$TMP_DOWNLOAD_DIR/$distributionUrlName" "$distributionUrl" || die "curl: Failed to fetch $distributionUrl"
++elif set_java_home; then
++  verbose "Falling back to use Java to download"
++  javaSource="$TMP_DOWNLOAD_DIR/Downloader.java"
++  targetZip="$TMP_DOWNLOAD_DIR/$distributionUrlName"
++  cat >"$javaSource" <<-END
++	public class Downloader extends java.net.Authenticator
++	{
++	  protected java.net.PasswordAuthentication getPasswordAuthentication()
++	  {
++	    return new java.net.PasswordAuthentication( System.getenv( "MVNW_USERNAME" ), System.getenv( "MVNW_PASSWORD" ).toCharArray() );
++	  }
++	  public static void main( String[] args ) throws Exception
++	  {
++	    setDefault( new Downloader() );
++	    java.nio.file.Files.copy( java.net.URI.create( args[0] ).toURL().openStream(), java.nio.file.Paths.get( args[1] ).toAbsolutePath().normalize() );
++	  }
++	}
++	END
++  # For Cygwin/MinGW, switch paths to Windows format before running javac and java
++  verbose " - Compiling Downloader.java ..."
++  "$(native_path "$JAVACCMD")" "$(native_path "$javaSource")" || die "Failed to compile Downloader.java"
++  verbose " - Running Downloader.java ..."
++  "$(native_path "$JAVACMD")" -cp "$(native_path "$TMP_DOWNLOAD_DIR")" Downloader "$distributionUrl" "$(native_path "$targetZip")"
++fi
++
++# If specified, validate the SHA-256 sum of the Maven distribution zip file
++if [ -n "${distributionSha256Sum-}" ]; then
++  distributionSha256Result=false
++  if [ "$MVN_CMD" = mvnd.sh ]; then
++    echo "Checksum validation is not supported for maven-mvnd." >&2
++    echo "Please disable validation by removing 'distributionSha256Sum' from your maven-wrapper.properties." >&2
++    exit 1
++  elif command -v sha256sum >/dev/null; then
++    if echo "$distributionSha256Sum  $TMP_DOWNLOAD_DIR/$distributionUrlName" | sha256sum -c >/dev/null 2>&1; then
++      distributionSha256Result=true
++    fi
++  elif command -v shasum >/dev/null; then
++    if echo "$distributionSha256Sum  $TMP_DOWNLOAD_DIR/$distributionUrlName" | shasum -a 256 -c >/dev/null 2>&1; then
++      distributionSha256Result=true
++    fi
++  else
++    echo "Checksum validation was requested but neither 'sha256sum' or 'shasum' are available." >&2
++    echo "Please install either command, or disable validation by removing 'distributionSha256Sum' from your maven-wrapper.properties." >&2
++    exit 1
++  fi
++  if [ $distributionSha256Result = false ]; then
++    echo "Error: Failed to validate Maven distribution SHA-256, your Maven distribution might be compromised." >&2
++    echo "If you updated your Maven version, you need to update the specified distributionSha256Sum property." >&2
++    exit 1
++  fi
++fi
++
++# unzip and move
++if command -v unzip >/dev/null; then
++  unzip ${__MVNW_QUIET_UNZIP:+"$__MVNW_QUIET_UNZIP"} "$TMP_DOWNLOAD_DIR/$distributionUrlName" -d "$TMP_DOWNLOAD_DIR" || die "failed to unzip"
++else
++  tar xzf${__MVNW_QUIET_TAR:+"$__MVNW_QUIET_TAR"} "$TMP_DOWNLOAD_DIR/$distributionUrlName" -C "$TMP_DOWNLOAD_DIR" || die "failed to untar"
++fi
++printf %s\\n "$distributionUrl" >"$TMP_DOWNLOAD_DIR/$distributionUrlNameMain/mvnw.url"
++mv -- "$TMP_DOWNLOAD_DIR/$distributionUrlNameMain" "$MAVEN_HOME" || [ -d "$MAVEN_HOME" ] || die "fail to move MAVEN_HOME"
++
++clean || :
++exec_maven "$@"
+Index: QuestionService/QuestionService/mvnw.cmd
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/QuestionService/QuestionService/mvnw.cmd b/QuestionService/QuestionService/mvnw.cmd
+new file mode 100644
+--- /dev/null	(revision a3588635740a06a8946ec51f6c69167ea2d62060)
++++ b/QuestionService/QuestionService/mvnw.cmd	(revision a3588635740a06a8946ec51f6c69167ea2d62060)
+@@ -0,0 +1,149 @@
++<# : batch portion
++@REM ----------------------------------------------------------------------------
++@REM Licensed to the Apache Software Foundation (ASF) under one
++@REM or more contributor license agreements.  See the NOTICE file
++@REM distributed with this work for additional information
++@REM regarding copyright ownership.  The ASF licenses this file
++@REM to you under the Apache License, Version 2.0 (the
++@REM "License"); you may not use this file except in compliance
++@REM with the License.  You may obtain a copy of the License at
++@REM
++@REM    https://www.apache.org/licenses/LICENSE-2.0
++@REM
++@REM Unless required by applicable law or agreed to in writing,
++@REM software distributed under the License is distributed on an
++@REM "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
++@REM KIND, either express or implied.  See the License for the
++@REM specific language governing permissions and limitations
++@REM under the License.
++@REM ----------------------------------------------------------------------------
++
++@REM ----------------------------------------------------------------------------
++@REM Apache Maven Wrapper startup batch script, version 3.3.2
++@REM
++@REM Optional ENV vars
++@REM   MVNW_REPOURL - repo url base for downloading maven distribution
++@REM   MVNW_USERNAME/MVNW_PASSWORD - user and password for downloading maven
++@REM   MVNW_VERBOSE - true: enable verbose log; others: silence the output
++@REM ----------------------------------------------------------------------------
++
++@IF "%__MVNW_ARG0_NAME__%"=="" (SET __MVNW_ARG0_NAME__=%~nx0)
++@SET __MVNW_CMD__=
++@SET __MVNW_ERROR__=
++@SET __MVNW_PSMODULEP_SAVE=%PSModulePath%
++@SET PSModulePath=
++@FOR /F "usebackq tokens=1* delims==" %%A IN (`powershell -noprofile "& {$scriptDir='%~dp0'; $script='%__MVNW_ARG0_NAME__%'; icm -ScriptBlock ([Scriptblock]::Create((Get-Content -Raw '%~f0'))) -NoNewScope}"`) DO @(
++  IF "%%A"=="MVN_CMD" (set __MVNW_CMD__=%%B) ELSE IF "%%B"=="" (echo %%A) ELSE (echo %%A=%%B)
++)
++@SET PSModulePath=%__MVNW_PSMODULEP_SAVE%
++@SET __MVNW_PSMODULEP_SAVE=
++@SET __MVNW_ARG0_NAME__=
++@SET MVNW_USERNAME=
++@SET MVNW_PASSWORD=
++@IF NOT "%__MVNW_CMD__%"=="" (%__MVNW_CMD__% %*)
++@echo Cannot start maven from wrapper >&2 && exit /b 1
++@GOTO :EOF
++: end batch / begin powershell #>
++
++$ErrorActionPreference = "Stop"
++if ($env:MVNW_VERBOSE -eq "true") {
++  $VerbosePreference = "Continue"
++}
++
++# calculate distributionUrl, requires .mvn/wrapper/maven-wrapper.properties
++$distributionUrl = (Get-Content -Raw "$scriptDir/.mvn/wrapper/maven-wrapper.properties" | ConvertFrom-StringData).distributionUrl
++if (!$distributionUrl) {
++  Write-Error "cannot read distributionUrl property in $scriptDir/.mvn/wrapper/maven-wrapper.properties"
++}
++
++switch -wildcard -casesensitive ( $($distributionUrl -replace '^.*/','') ) {
++  "maven-mvnd-*" {
++    $USE_MVND = $true
++    $distributionUrl = $distributionUrl -replace '-bin\.[^.]*$',"-windows-amd64.zip"
++    $MVN_CMD = "mvnd.cmd"
++    break
++  }
++  default {
++    $USE_MVND = $false
++    $MVN_CMD = $script -replace '^mvnw','mvn'
++    break
++  }
++}
++
++# apply MVNW_REPOURL and calculate MAVEN_HOME
++# maven home pattern: ~/.m2/wrapper/dists/{apache-maven-<version>,maven-mvnd-<version>-<platform>}/<hash>
++if ($env:MVNW_REPOURL) {
++  $MVNW_REPO_PATTERN = if ($USE_MVND) { "/org/apache/maven/" } else { "/maven/mvnd/" }
++  $distributionUrl = "$env:MVNW_REPOURL$MVNW_REPO_PATTERN$($distributionUrl -replace '^.*'+$MVNW_REPO_PATTERN,'')"
++}
++$distributionUrlName = $distributionUrl -replace '^.*/',''
++$distributionUrlNameMain = $distributionUrlName -replace '\.[^.]*$','' -replace '-bin$',''
++$MAVEN_HOME_PARENT = "$HOME/.m2/wrapper/dists/$distributionUrlNameMain"
++if ($env:MAVEN_USER_HOME) {
++  $MAVEN_HOME_PARENT = "$env:MAVEN_USER_HOME/wrapper/dists/$distributionUrlNameMain"
++}
++$MAVEN_HOME_NAME = ([System.Security.Cryptography.MD5]::Create().ComputeHash([byte[]][char[]]$distributionUrl) | ForEach-Object {$_.ToString("x2")}) -join ''
++$MAVEN_HOME = "$MAVEN_HOME_PARENT/$MAVEN_HOME_NAME"
++
++if (Test-Path -Path "$MAVEN_HOME" -PathType Container) {
++  Write-Verbose "found existing MAVEN_HOME at $MAVEN_HOME"
++  Write-Output "MVN_CMD=$MAVEN_HOME/bin/$MVN_CMD"
++  exit $?
++}
++
++if (! $distributionUrlNameMain -or ($distributionUrlName -eq $distributionUrlNameMain)) {
++  Write-Error "distributionUrl is not valid, must end with *-bin.zip, but found $distributionUrl"
++}
++
++# prepare tmp dir
++$TMP_DOWNLOAD_DIR_HOLDER = New-TemporaryFile
++$TMP_DOWNLOAD_DIR = New-Item -Itemtype Directory -Path "$TMP_DOWNLOAD_DIR_HOLDER.dir"
++$TMP_DOWNLOAD_DIR_HOLDER.Delete() | Out-Null
++trap {
++  if ($TMP_DOWNLOAD_DIR.Exists) {
++    try { Remove-Item $TMP_DOWNLOAD_DIR -Recurse -Force | Out-Null }
++    catch { Write-Warning "Cannot remove $TMP_DOWNLOAD_DIR" }
++  }
++}
++
++New-Item -Itemtype Directory -Path "$MAVEN_HOME_PARENT" -Force | Out-Null
++
++# Download and Install Apache Maven
++Write-Verbose "Couldn't find MAVEN_HOME, downloading and installing it ..."
++Write-Verbose "Downloading from: $distributionUrl"
++Write-Verbose "Downloading to: $TMP_DOWNLOAD_DIR/$distributionUrlName"
++
++$webclient = New-Object System.Net.WebClient
++if ($env:MVNW_USERNAME -and $env:MVNW_PASSWORD) {
++  $webclient.Credentials = New-Object System.Net.NetworkCredential($env:MVNW_USERNAME, $env:MVNW_PASSWORD)
++}
++[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
++$webclient.DownloadFile($distributionUrl, "$TMP_DOWNLOAD_DIR/$distributionUrlName") | Out-Null
++
++# If specified, validate the SHA-256 sum of the Maven distribution zip file
++$distributionSha256Sum = (Get-Content -Raw "$scriptDir/.mvn/wrapper/maven-wrapper.properties" | ConvertFrom-StringData).distributionSha256Sum
++if ($distributionSha256Sum) {
++  if ($USE_MVND) {
++    Write-Error "Checksum validation is not supported for maven-mvnd. `nPlease disable validation by removing 'distributionSha256Sum' from your maven-wrapper.properties."
++  }
++  Import-Module $PSHOME\Modules\Microsoft.PowerShell.Utility -Function Get-FileHash
++  if ((Get-FileHash "$TMP_DOWNLOAD_DIR/$distributionUrlName" -Algorithm SHA256).Hash.ToLower() -ne $distributionSha256Sum) {
++    Write-Error "Error: Failed to validate Maven distribution SHA-256, your Maven distribution might be compromised. If you updated your Maven version, you need to update the specified distributionSha256Sum property."
++  }
++}
++
++# unzip and move
++Expand-Archive "$TMP_DOWNLOAD_DIR/$distributionUrlName" -DestinationPath "$TMP_DOWNLOAD_DIR" | Out-Null
++Rename-Item -Path "$TMP_DOWNLOAD_DIR/$distributionUrlNameMain" -NewName $MAVEN_HOME_NAME | Out-Null
++try {
++  Move-Item -Path "$TMP_DOWNLOAD_DIR/$MAVEN_HOME_NAME" -Destination $MAVEN_HOME_PARENT | Out-Null
++} catch {
++  if (! (Test-Path -Path "$MAVEN_HOME" -PathType Container)) {
++    Write-Error "fail to move MAVEN_HOME"
++  }
++} finally {
++  try { Remove-Item $TMP_DOWNLOAD_DIR -Recurse -Force | Out-Null }
++  catch { Write-Warning "Cannot remove $TMP_DOWNLOAD_DIR" }
++}
++
++Write-Output "MVN_CMD=$MAVEN_HOME/bin/$MVN_CMD"
+Index: QuestionService/QuestionService/pom.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/QuestionService/QuestionService/pom.xml b/QuestionService/QuestionService/pom.xml
+new file mode 100644
+--- /dev/null	(revision a3588635740a06a8946ec51f6c69167ea2d62060)
++++ b/QuestionService/QuestionService/pom.xml	(revision a3588635740a06a8946ec51f6c69167ea2d62060)
+@@ -0,0 +1,91 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
++	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
++	<modelVersion>4.0.0</modelVersion>
++	<parent>
++		<groupId>org.springframework.boot</groupId>
++		<artifactId>spring-boot-starter-parent</artifactId>
++		<version>3.3.1</version>
++		<relativePath/> <!-- lookup parent from repository -->
++	</parent>
++	<groupId>com.question</groupId>
++	<artifactId>QuestionService</artifactId>
++	<version>0.0.1-SNAPSHOT</version>
++	<name>QuestionService</name>
++	<description>This is Question Service</description>
++	<url/>
++	<licenses>
++		<license/>
++	</licenses>
++	<developers>
++		<developer/>
++	</developers>
++	<scm>
++		<connection/>
++		<developerConnection/>
++		<tag/>
++		<url/>
++	</scm>
++	<properties>
++		<java.version>17</java.version>
++		<spring-cloud.version>2023.0.2</spring-cloud.version>
++	</properties>
++	<dependencies>
++		<dependency>
++			<groupId>org.springframework.boot</groupId>
++			<artifactId>spring-boot-starter-data-jpa</artifactId>
++		</dependency>
++		<dependency>
++			<groupId>org.springframework.boot</groupId>
++			<artifactId>spring-boot-starter-web</artifactId>
++		</dependency>
++		<dependency>
++			<groupId>org.springframework.cloud</groupId>
++			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
++		</dependency>
++
++		<dependency>
++			<groupId>com.mysql</groupId>
++			<artifactId>mysql-connector-j</artifactId>
++			<scope>runtime</scope>
++		</dependency>
++		<dependency>
++			<groupId>org.projectlombok</groupId>
++			<artifactId>lombok</artifactId>
++			<optional>true</optional>
++		</dependency>
++		<dependency>
++			<groupId>org.springframework.boot</groupId>
++			<artifactId>spring-boot-starter-test</artifactId>
++			<scope>test</scope>
++		</dependency>
++	</dependencies>
++	<dependencyManagement>
++		<dependencies>
++			<dependency>
++				<groupId>org.springframework.cloud</groupId>
++				<artifactId>spring-cloud-dependencies</artifactId>
++				<version>${spring-cloud.version}</version>
++				<type>pom</type>
++				<scope>import</scope>
++			</dependency>
++		</dependencies>
++	</dependencyManagement>
++	<build>
++		<plugins>
++			<plugin>
++				<groupId>org.springframework.boot</groupId>
++				<artifactId>spring-boot-maven-plugin</artifactId>
++				<configuration>
++					<excludes>
++						<exclude>
++							<groupId>org.projectlombok</groupId>
++							<artifactId>lombok</artifactId>
++						</exclude>
++					</excludes>
++				</configuration>
++			</plugin>
++		</plugins>
++	</build>
++
++</project>
+Index: QuestionService/QuestionService/src/main/java/com/question/QuestionServiceApplication.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/QuestionService/QuestionService/src/main/java/com/question/QuestionServiceApplication.java b/QuestionService/QuestionService/src/main/java/com/question/QuestionServiceApplication.java
+new file mode 100644
+--- /dev/null	(revision a3588635740a06a8946ec51f6c69167ea2d62060)
++++ b/QuestionService/QuestionService/src/main/java/com/question/QuestionServiceApplication.java	(revision a3588635740a06a8946ec51f6c69167ea2d62060)
+@@ -0,0 +1,15 @@
++package com.question;
++
++import org.springframework.boot.SpringApplication;
++import org.springframework.boot.autoconfigure.SpringBootApplication;
++
++@SpringBootApplication
++public class QuestionServiceApplication {
++
++	public static void main(String[] args) {
++		SpringApplication.run(QuestionServiceApplication.class, args);
++	}
++
++}
++
++
+Index: QuestionService/QuestionService/src/main/java/com/question/controllers/QuestionController.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/QuestionService/QuestionService/src/main/java/com/question/controllers/QuestionController.java b/QuestionService/QuestionService/src/main/java/com/question/controllers/QuestionController.java
+new file mode 100644
+--- /dev/null	(revision a3588635740a06a8946ec51f6c69167ea2d62060)
++++ b/QuestionService/QuestionService/src/main/java/com/question/controllers/QuestionController.java	(revision a3588635740a06a8946ec51f6c69167ea2d62060)
+@@ -0,0 +1,41 @@
++package com.question.controllers;
++
++
++import com.question.entities.Question;
++import com.question.services.QuestionService;
++import org.springframework.web.bind.annotation.*;
++
++import java.util.List;
++
++@RestController
++@RequestMapping("/question")
++public class QuestionController {
++
++    private QuestionService questionService;
++
++    public QuestionController(QuestionService questionService) {
++        this.questionService = questionService;
++    }
++
++    //create
++    @PostMapping
++    public Question create(@RequestBody Question question){
++        return questionService.create(question);
++    }
++
++    //get
++    @GetMapping
++   public  List<Question> getAll(){
++        return questionService.get();
++    }
++
++    @GetMapping("/{questionID}")
++    public Question get(@PathVariable Long questionID){
++        return questionService.getOne(questionID);
++    }
++
++    @GetMapping("/quiz/{quizId}")
++    public List<Question> getQuestionsOfQuiz(@PathVariable Long quizId){
++    return questionService.getQuestionsOfQuiz(quizId);
++    }
++}
+Index: QuestionService/QuestionService/src/main/java/com/question/entities/Question.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/QuestionService/QuestionService/src/main/java/com/question/entities/Question.java b/QuestionService/QuestionService/src/main/java/com/question/entities/Question.java
+new file mode 100644
+--- /dev/null	(revision a3588635740a06a8946ec51f6c69167ea2d62060)
++++ b/QuestionService/QuestionService/src/main/java/com/question/entities/Question.java	(revision a3588635740a06a8946ec51f6c69167ea2d62060)
+@@ -0,0 +1,27 @@
++package com.question.entities;
++
++
++import jakarta.persistence.Entity;
++import jakarta.persistence.GeneratedValue;
++import jakarta.persistence.GenerationType;
++import jakarta.persistence.Id;
++import lombok.AllArgsConstructor;
++import lombok.Getter;
++import lombok.NoArgsConstructor;
++import lombok.Setter;
++
++@Entity
++@Getter
++@Setter
++@AllArgsConstructor
++@NoArgsConstructor
++public class Question {
++
++    @Id
++    @GeneratedValue(strategy = GenerationType.IDENTITY)
++    private Long quwstionId;
++
++    private String question;
++
++    private Long quizId;
++}
+Index: QuestionService/QuestionService/src/main/java/com/question/repositories/QuestionRepository.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/QuestionService/QuestionService/src/main/java/com/question/repositories/QuestionRepository.java b/QuestionService/QuestionService/src/main/java/com/question/repositories/QuestionRepository.java
+new file mode 100644
+--- /dev/null	(revision a3588635740a06a8946ec51f6c69167ea2d62060)
++++ b/QuestionService/QuestionService/src/main/java/com/question/repositories/QuestionRepository.java	(revision a3588635740a06a8946ec51f6c69167ea2d62060)
+@@ -0,0 +1,11 @@
++package com.question.repositories;
++
++import com.question.entities.Question;
++import org.springframework.data.jpa.repository.JpaRepository;
++
++import java.util.List;
++
++public interface QuestionRepository extends JpaRepository<Question,Long> {
++
++    List<Question> findByQuizId(Long quizId);
++}
+Index: QuestionService/QuestionService/src/main/java/com/question/services/QuestionService.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/QuestionService/QuestionService/src/main/java/com/question/services/QuestionService.java b/QuestionService/QuestionService/src/main/java/com/question/services/QuestionService.java
+new file mode 100644
+--- /dev/null	(revision a3588635740a06a8946ec51f6c69167ea2d62060)
++++ b/QuestionService/QuestionService/src/main/java/com/question/services/QuestionService.java	(revision a3588635740a06a8946ec51f6c69167ea2d62060)
+@@ -0,0 +1,17 @@
++package com.question.services;
++
++import com.question.entities.Question;
++
++import java.util.List;
++
++public interface QuestionService {
++
++    Question create(Question question);
++
++    List<Question> get();
++
++    Question getOne(Long id);
++
++    List<Question> getQuestionsOfQuiz(Long quizId);
++
++}
+Index: QuestionService/QuestionService/src/main/java/com/question/services/impl/QuestionServiceImpl.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/QuestionService/QuestionService/src/main/java/com/question/services/impl/QuestionServiceImpl.java b/QuestionService/QuestionService/src/main/java/com/question/services/impl/QuestionServiceImpl.java
+new file mode 100644
+--- /dev/null	(revision a3588635740a06a8946ec51f6c69167ea2d62060)
++++ b/QuestionService/QuestionService/src/main/java/com/question/services/impl/QuestionServiceImpl.java	(revision a3588635740a06a8946ec51f6c69167ea2d62060)
+@@ -0,0 +1,38 @@
++package com.question.services.impl;
++
++import com.question.entities.Question;
++import com.question.repositories.QuestionRepository;
++import com.question.services.QuestionService;
++import org.springframework.stereotype.Service;
++
++import java.util.List;
++
++@Service
++public class QuestionServiceImpl implements QuestionService {
++
++    private QuestionRepository questionRepository;
++
++    public QuestionServiceImpl(QuestionRepository questionRepository) {
++        this.questionRepository = questionRepository;
++    }
++
++    @Override
++    public Question create(Question question) {
++        return questionRepository.save(question);
++    }
++
++    @Override
++    public List<Question> get() {
++        return questionRepository.findAll();
++    }
++
++    @Override
++    public Question getOne(Long id) {
++        return questionRepository.findById(id).orElseThrow(()->new RuntimeException("Question not found"));
++    }
++
++    @Override
++    public List<Question> getQuestionsOfQuiz(Long quizId) {
++        return questionRepository.findByQuizId(quizId);
++    }
++}
+Index: QuestionService/QuestionService/src/main/resources/application.properties
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>ISO-8859-1
+===================================================================
+diff --git a/QuestionService/QuestionService/src/main/resources/application.properties b/QuestionService/QuestionService/src/main/resources/application.properties
+new file mode 100644
+--- /dev/null	(revision a3588635740a06a8946ec51f6c69167ea2d62060)
++++ b/QuestionService/QuestionService/src/main/resources/application.properties	(revision a3588635740a06a8946ec51f6c69167ea2d62060)
+@@ -0,0 +1,9 @@
++server.port=9092
++spring.application.name=QUESTION-SERVICE
++spring.jpa.hibernate.ddl-auto=update
++spring.datasource.url=jdbc:mysql://localhost:3306/micro_yt
++spring.datasource.username=root
++spring.datasource.password=root
++
++spring.jpa.show-sql=true
++eureka.instance.client.serverUrl.defaultZone=http://localhost:8761/eureka/
+\ No newline at end of file
+Index: QuestionService/QuestionService/src/test/java/com/question/QuestionServiceApplicationTests.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/QuestionService/QuestionService/src/test/java/com/question/QuestionServiceApplicationTests.java b/QuestionService/QuestionService/src/test/java/com/question/QuestionServiceApplicationTests.java
+new file mode 100644
+--- /dev/null	(revision a3588635740a06a8946ec51f6c69167ea2d62060)
++++ b/QuestionService/QuestionService/src/test/java/com/question/QuestionServiceApplicationTests.java	(revision a3588635740a06a8946ec51f6c69167ea2d62060)
+@@ -0,0 +1,13 @@
++package com.question;
++
++import org.junit.jupiter.api.Test;
++import org.springframework.boot.test.context.SpringBootTest;
++
++@SpringBootTest
++class QuestionServiceApplicationTests {
++
++	@Test
++	void contextLoads() {
++	}
++
++}
+Index: QuizService/QuizService/.gitignore
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/QuizService/QuizService/.gitignore b/QuizService/QuizService/.gitignore
+new file mode 100644
+--- /dev/null	(revision a3588635740a06a8946ec51f6c69167ea2d62060)
++++ b/QuizService/QuizService/.gitignore	(revision a3588635740a06a8946ec51f6c69167ea2d62060)
+@@ -0,0 +1,33 @@
++HELP.md
++target/
++!.mvn/wrapper/maven-wrapper.jar
++!**/src/main/**/target/
++!**/src/test/**/target/
++
++### STS ###
++.apt_generated
++.classpath
++.factorypath
++.project
++.settings
++.springBeans
++.sts4-cache
++
++### IntelliJ IDEA ###
++.idea
++*.iws
++*.iml
++*.ipr
++
++### NetBeans ###
++/nbproject/private/
++/nbbuild/
++/dist/
++/nbdist/
++/.nb-gradle/
++build/
++!**/src/main/**/build/
++!**/src/test/**/build/
++
++### VS Code ###
++.vscode/
+Index: QuizService/QuizService/.mvn/wrapper/maven-wrapper.properties
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>ISO-8859-1
+===================================================================
+diff --git a/QuizService/QuizService/.mvn/wrapper/maven-wrapper.properties b/QuizService/QuizService/.mvn/wrapper/maven-wrapper.properties
+new file mode 100644
+--- /dev/null	(revision a3588635740a06a8946ec51f6c69167ea2d62060)
++++ b/QuizService/QuizService/.mvn/wrapper/maven-wrapper.properties	(revision a3588635740a06a8946ec51f6c69167ea2d62060)
+@@ -0,0 +1,19 @@
++# Licensed to the Apache Software Foundation (ASF) under one
++# or more contributor license agreements.  See the NOTICE file
++# distributed with this work for additional information
++# regarding copyright ownership.  The ASF licenses this file
++# to you under the Apache License, Version 2.0 (the
++# "License"); you may not use this file except in compliance
++# with the License.  You may obtain a copy of the License at
++#
++#   https://www.apache.org/licenses/LICENSE-2.0
++#
++# Unless required by applicable law or agreed to in writing,
++# software distributed under the License is distributed on an
++# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
++# KIND, either express or implied.  See the License for the
++# specific language governing permissions and limitations
++# under the License.
++wrapperVersion=3.3.2
++distributionType=only-script
++distributionUrl=https://repo.maven.apache.org/maven2/org/apache/maven/apache-maven/3.9.7/apache-maven-3.9.7-bin.zip
+Index: QuizService/QuizService/mvnw
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/QuizService/QuizService/mvnw b/QuizService/QuizService/mvnw
+new file mode 100644
+--- /dev/null	(revision a3588635740a06a8946ec51f6c69167ea2d62060)
++++ b/QuizService/QuizService/mvnw	(revision a3588635740a06a8946ec51f6c69167ea2d62060)
+@@ -0,0 +1,259 @@
++#!/bin/sh
++# ----------------------------------------------------------------------------
++# Licensed to the Apache Software Foundation (ASF) under one
++# or more contributor license agreements.  See the NOTICE file
++# distributed with this work for additional information
++# regarding copyright ownership.  The ASF licenses this file
++# to you under the Apache License, Version 2.0 (the
++# "License"); you may not use this file except in compliance
++# with the License.  You may obtain a copy of the License at
++#
++#    https://www.apache.org/licenses/LICENSE-2.0
++#
++# Unless required by applicable law or agreed to in writing,
++# software distributed under the License is distributed on an
++# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
++# KIND, either express or implied.  See the License for the
++# specific language governing permissions and limitations
++# under the License.
++# ----------------------------------------------------------------------------
++
++# ----------------------------------------------------------------------------
++# Apache Maven Wrapper startup batch script, version 3.3.2
++#
++# Optional ENV vars
++# -----------------
++#   JAVA_HOME - location of a JDK home dir, required when download maven via java source
++#   MVNW_REPOURL - repo url base for downloading maven distribution
++#   MVNW_USERNAME/MVNW_PASSWORD - user and password for downloading maven
++#   MVNW_VERBOSE - true: enable verbose log; debug: trace the mvnw script; others: silence the output
++# ----------------------------------------------------------------------------
++
++set -euf
++[ "${MVNW_VERBOSE-}" != debug ] || set -x
++
++# OS specific support.
++native_path() { printf %s\\n "$1"; }
++case "$(uname)" in
++CYGWIN* | MINGW*)
++  [ -z "${JAVA_HOME-}" ] || JAVA_HOME="$(cygpath --unix "$JAVA_HOME")"
++  native_path() { cygpath --path --windows "$1"; }
++  ;;
++esac
++
++# set JAVACMD and JAVACCMD
++set_java_home() {
++  # For Cygwin and MinGW, ensure paths are in Unix format before anything is touched
++  if [ -n "${JAVA_HOME-}" ]; then
++    if [ -x "$JAVA_HOME/jre/sh/java" ]; then
++      # IBM's JDK on AIX uses strange locations for the executables
++      JAVACMD="$JAVA_HOME/jre/sh/java"
++      JAVACCMD="$JAVA_HOME/jre/sh/javac"
++    else
++      JAVACMD="$JAVA_HOME/bin/java"
++      JAVACCMD="$JAVA_HOME/bin/javac"
++
++      if [ ! -x "$JAVACMD" ] || [ ! -x "$JAVACCMD" ]; then
++        echo "The JAVA_HOME environment variable is not defined correctly, so mvnw cannot run." >&2
++        echo "JAVA_HOME is set to \"$JAVA_HOME\", but \"\$JAVA_HOME/bin/java\" or \"\$JAVA_HOME/bin/javac\" does not exist." >&2
++        return 1
++      fi
++    fi
++  else
++    JAVACMD="$(
++      'set' +e
++      'unset' -f command 2>/dev/null
++      'command' -v java
++    )" || :
++    JAVACCMD="$(
++      'set' +e
++      'unset' -f command 2>/dev/null
++      'command' -v javac
++    )" || :
++
++    if [ ! -x "${JAVACMD-}" ] || [ ! -x "${JAVACCMD-}" ]; then
++      echo "The java/javac command does not exist in PATH nor is JAVA_HOME set, so mvnw cannot run." >&2
++      return 1
++    fi
++  fi
++}
++
++# hash string like Java String::hashCode
++hash_string() {
++  str="${1:-}" h=0
++  while [ -n "$str" ]; do
++    char="${str%"${str#?}"}"
++    h=$(((h * 31 + $(LC_CTYPE=C printf %d "'$char")) % 4294967296))
++    str="${str#?}"
++  done
++  printf %x\\n $h
++}
++
++verbose() { :; }
++[ "${MVNW_VERBOSE-}" != true ] || verbose() { printf %s\\n "${1-}"; }
++
++die() {
++  printf %s\\n "$1" >&2
++  exit 1
++}
++
++trim() {
++  # MWRAPPER-139:
++  #   Trims trailing and leading whitespace, carriage returns, tabs, and linefeeds.
++  #   Needed for removing poorly interpreted newline sequences when running in more
++  #   exotic environments such as mingw bash on Windows.
++  printf "%s" "${1}" | tr -d '[:space:]'
++}
++
++# parse distributionUrl and optional distributionSha256Sum, requires .mvn/wrapper/maven-wrapper.properties
++while IFS="=" read -r key value; do
++  case "${key-}" in
++  distributionUrl) distributionUrl=$(trim "${value-}") ;;
++  distributionSha256Sum) distributionSha256Sum=$(trim "${value-}") ;;
++  esac
++done <"${0%/*}/.mvn/wrapper/maven-wrapper.properties"
++[ -n "${distributionUrl-}" ] || die "cannot read distributionUrl property in ${0%/*}/.mvn/wrapper/maven-wrapper.properties"
++
++case "${distributionUrl##*/}" in
++maven-mvnd-*bin.*)
++  MVN_CMD=mvnd.sh _MVNW_REPO_PATTERN=/maven/mvnd/
++  case "${PROCESSOR_ARCHITECTURE-}${PROCESSOR_ARCHITEW6432-}:$(uname -a)" in
++  *AMD64:CYGWIN* | *AMD64:MINGW*) distributionPlatform=windows-amd64 ;;
++  :Darwin*x86_64) distributionPlatform=darwin-amd64 ;;
++  :Darwin*arm64) distributionPlatform=darwin-aarch64 ;;
++  :Linux*x86_64*) distributionPlatform=linux-amd64 ;;
++  *)
++    echo "Cannot detect native platform for mvnd on $(uname)-$(uname -m), use pure java version" >&2
++    distributionPlatform=linux-amd64
++    ;;
++  esac
++  distributionUrl="${distributionUrl%-bin.*}-$distributionPlatform.zip"
++  ;;
++maven-mvnd-*) MVN_CMD=mvnd.sh _MVNW_REPO_PATTERN=/maven/mvnd/ ;;
++*) MVN_CMD="mvn${0##*/mvnw}" _MVNW_REPO_PATTERN=/org/apache/maven/ ;;
++esac
++
++# apply MVNW_REPOURL and calculate MAVEN_HOME
++# maven home pattern: ~/.m2/wrapper/dists/{apache-maven-<version>,maven-mvnd-<version>-<platform>}/<hash>
++[ -z "${MVNW_REPOURL-}" ] || distributionUrl="$MVNW_REPOURL$_MVNW_REPO_PATTERN${distributionUrl#*"$_MVNW_REPO_PATTERN"}"
++distributionUrlName="${distributionUrl##*/}"
++distributionUrlNameMain="${distributionUrlName%.*}"
++distributionUrlNameMain="${distributionUrlNameMain%-bin}"
++MAVEN_USER_HOME="${MAVEN_USER_HOME:-${HOME}/.m2}"
++MAVEN_HOME="${MAVEN_USER_HOME}/wrapper/dists/${distributionUrlNameMain-}/$(hash_string "$distributionUrl")"
++
++exec_maven() {
++  unset MVNW_VERBOSE MVNW_USERNAME MVNW_PASSWORD MVNW_REPOURL || :
++  exec "$MAVEN_HOME/bin/$MVN_CMD" "$@" || die "cannot exec $MAVEN_HOME/bin/$MVN_CMD"
++}
++
++if [ -d "$MAVEN_HOME" ]; then
++  verbose "found existing MAVEN_HOME at $MAVEN_HOME"
++  exec_maven "$@"
++fi
++
++case "${distributionUrl-}" in
++*?-bin.zip | *?maven-mvnd-?*-?*.zip) ;;
++*) die "distributionUrl is not valid, must match *-bin.zip or maven-mvnd-*.zip, but found '${distributionUrl-}'" ;;
++esac
++
++# prepare tmp dir
++if TMP_DOWNLOAD_DIR="$(mktemp -d)" && [ -d "$TMP_DOWNLOAD_DIR" ]; then
++  clean() { rm -rf -- "$TMP_DOWNLOAD_DIR"; }
++  trap clean HUP INT TERM EXIT
++else
++  die "cannot create temp dir"
++fi
++
++mkdir -p -- "${MAVEN_HOME%/*}"
++
++# Download and Install Apache Maven
++verbose "Couldn't find MAVEN_HOME, downloading and installing it ..."
++verbose "Downloading from: $distributionUrl"
++verbose "Downloading to: $TMP_DOWNLOAD_DIR/$distributionUrlName"
++
++# select .zip or .tar.gz
++if ! command -v unzip >/dev/null; then
++  distributionUrl="${distributionUrl%.zip}.tar.gz"
++  distributionUrlName="${distributionUrl##*/}"
++fi
++
++# verbose opt
++__MVNW_QUIET_WGET=--quiet __MVNW_QUIET_CURL=--silent __MVNW_QUIET_UNZIP=-q __MVNW_QUIET_TAR=''
++[ "${MVNW_VERBOSE-}" != true ] || __MVNW_QUIET_WGET='' __MVNW_QUIET_CURL='' __MVNW_QUIET_UNZIP='' __MVNW_QUIET_TAR=v
++
++# normalize http auth
++case "${MVNW_PASSWORD:+has-password}" in
++'') MVNW_USERNAME='' MVNW_PASSWORD='' ;;
++has-password) [ -n "${MVNW_USERNAME-}" ] || MVNW_USERNAME='' MVNW_PASSWORD='' ;;
++esac
++
++if [ -z "${MVNW_USERNAME-}" ] && command -v wget >/dev/null; then
++  verbose "Found wget ... using wget"
++  wget ${__MVNW_QUIET_WGET:+"$__MVNW_QUIET_WGET"} "$distributionUrl" -O "$TMP_DOWNLOAD_DIR/$distributionUrlName" || die "wget: Failed to fetch $distributionUrl"
++elif [ -z "${MVNW_USERNAME-}" ] && command -v curl >/dev/null; then
++  verbose "Found curl ... using curl"
++  curl ${__MVNW_QUIET_CURL:+"$__MVNW_QUIET_CURL"} -f -L -o "$TMP_DOWNLOAD_DIR/$distributionUrlName" "$distributionUrl" || die "curl: Failed to fetch $distributionUrl"
++elif set_java_home; then
++  verbose "Falling back to use Java to download"
++  javaSource="$TMP_DOWNLOAD_DIR/Downloader.java"
++  targetZip="$TMP_DOWNLOAD_DIR/$distributionUrlName"
++  cat >"$javaSource" <<-END
++	public class Downloader extends java.net.Authenticator
++	{
++	  protected java.net.PasswordAuthentication getPasswordAuthentication()
++	  {
++	    return new java.net.PasswordAuthentication( System.getenv( "MVNW_USERNAME" ), System.getenv( "MVNW_PASSWORD" ).toCharArray() );
++	  }
++	  public static void main( String[] args ) throws Exception
++	  {
++	    setDefault( new Downloader() );
++	    java.nio.file.Files.copy( java.net.URI.create( args[0] ).toURL().openStream(), java.nio.file.Paths.get( args[1] ).toAbsolutePath().normalize() );
++	  }
++	}
++	END
++  # For Cygwin/MinGW, switch paths to Windows format before running javac and java
++  verbose " - Compiling Downloader.java ..."
++  "$(native_path "$JAVACCMD")" "$(native_path "$javaSource")" || die "Failed to compile Downloader.java"
++  verbose " - Running Downloader.java ..."
++  "$(native_path "$JAVACMD")" -cp "$(native_path "$TMP_DOWNLOAD_DIR")" Downloader "$distributionUrl" "$(native_path "$targetZip")"
++fi
++
++# If specified, validate the SHA-256 sum of the Maven distribution zip file
++if [ -n "${distributionSha256Sum-}" ]; then
++  distributionSha256Result=false
++  if [ "$MVN_CMD" = mvnd.sh ]; then
++    echo "Checksum validation is not supported for maven-mvnd." >&2
++    echo "Please disable validation by removing 'distributionSha256Sum' from your maven-wrapper.properties." >&2
++    exit 1
++  elif command -v sha256sum >/dev/null; then
++    if echo "$distributionSha256Sum  $TMP_DOWNLOAD_DIR/$distributionUrlName" | sha256sum -c >/dev/null 2>&1; then
++      distributionSha256Result=true
++    fi
++  elif command -v shasum >/dev/null; then
++    if echo "$distributionSha256Sum  $TMP_DOWNLOAD_DIR/$distributionUrlName" | shasum -a 256 -c >/dev/null 2>&1; then
++      distributionSha256Result=true
++    fi
++  else
++    echo "Checksum validation was requested but neither 'sha256sum' or 'shasum' are available." >&2
++    echo "Please install either command, or disable validation by removing 'distributionSha256Sum' from your maven-wrapper.properties." >&2
++    exit 1
++  fi
++  if [ $distributionSha256Result = false ]; then
++    echo "Error: Failed to validate Maven distribution SHA-256, your Maven distribution might be compromised." >&2
++    echo "If you updated your Maven version, you need to update the specified distributionSha256Sum property." >&2
++    exit 1
++  fi
++fi
++
++# unzip and move
++if command -v unzip >/dev/null; then
++  unzip ${__MVNW_QUIET_UNZIP:+"$__MVNW_QUIET_UNZIP"} "$TMP_DOWNLOAD_DIR/$distributionUrlName" -d "$TMP_DOWNLOAD_DIR" || die "failed to unzip"
++else
++  tar xzf${__MVNW_QUIET_TAR:+"$__MVNW_QUIET_TAR"} "$TMP_DOWNLOAD_DIR/$distributionUrlName" -C "$TMP_DOWNLOAD_DIR" || die "failed to untar"
++fi
++printf %s\\n "$distributionUrl" >"$TMP_DOWNLOAD_DIR/$distributionUrlNameMain/mvnw.url"
++mv -- "$TMP_DOWNLOAD_DIR/$distributionUrlNameMain" "$MAVEN_HOME" || [ -d "$MAVEN_HOME" ] || die "fail to move MAVEN_HOME"
++
++clean || :
++exec_maven "$@"
+Index: QuizService/QuizService/mvnw.cmd
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/QuizService/QuizService/mvnw.cmd b/QuizService/QuizService/mvnw.cmd
+new file mode 100644
+--- /dev/null	(revision a3588635740a06a8946ec51f6c69167ea2d62060)
++++ b/QuizService/QuizService/mvnw.cmd	(revision a3588635740a06a8946ec51f6c69167ea2d62060)
+@@ -0,0 +1,149 @@
++<# : batch portion
++@REM ----------------------------------------------------------------------------
++@REM Licensed to the Apache Software Foundation (ASF) under one
++@REM or more contributor license agreements.  See the NOTICE file
++@REM distributed with this work for additional information
++@REM regarding copyright ownership.  The ASF licenses this file
++@REM to you under the Apache License, Version 2.0 (the
++@REM "License"); you may not use this file except in compliance
++@REM with the License.  You may obtain a copy of the License at
++@REM
++@REM    https://www.apache.org/licenses/LICENSE-2.0
++@REM
++@REM Unless required by applicable law or agreed to in writing,
++@REM software distributed under the License is distributed on an
++@REM "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
++@REM KIND, either express or implied.  See the License for the
++@REM specific language governing permissions and limitations
++@REM under the License.
++@REM ----------------------------------------------------------------------------
++
++@REM ----------------------------------------------------------------------------
++@REM Apache Maven Wrapper startup batch script, version 3.3.2
++@REM
++@REM Optional ENV vars
++@REM   MVNW_REPOURL - repo url base for downloading maven distribution
++@REM   MVNW_USERNAME/MVNW_PASSWORD - user and password for downloading maven
++@REM   MVNW_VERBOSE - true: enable verbose log; others: silence the output
++@REM ----------------------------------------------------------------------------
++
++@IF "%__MVNW_ARG0_NAME__%"=="" (SET __MVNW_ARG0_NAME__=%~nx0)
++@SET __MVNW_CMD__=
++@SET __MVNW_ERROR__=
++@SET __MVNW_PSMODULEP_SAVE=%PSModulePath%
++@SET PSModulePath=
++@FOR /F "usebackq tokens=1* delims==" %%A IN (`powershell -noprofile "& {$scriptDir='%~dp0'; $script='%__MVNW_ARG0_NAME__%'; icm -ScriptBlock ([Scriptblock]::Create((Get-Content -Raw '%~f0'))) -NoNewScope}"`) DO @(
++  IF "%%A"=="MVN_CMD" (set __MVNW_CMD__=%%B) ELSE IF "%%B"=="" (echo %%A) ELSE (echo %%A=%%B)
++)
++@SET PSModulePath=%__MVNW_PSMODULEP_SAVE%
++@SET __MVNW_PSMODULEP_SAVE=
++@SET __MVNW_ARG0_NAME__=
++@SET MVNW_USERNAME=
++@SET MVNW_PASSWORD=
++@IF NOT "%__MVNW_CMD__%"=="" (%__MVNW_CMD__% %*)
++@echo Cannot start maven from wrapper >&2 && exit /b 1
++@GOTO :EOF
++: end batch / begin powershell #>
++
++$ErrorActionPreference = "Stop"
++if ($env:MVNW_VERBOSE -eq "true") {
++  $VerbosePreference = "Continue"
++}
++
++# calculate distributionUrl, requires .mvn/wrapper/maven-wrapper.properties
++$distributionUrl = (Get-Content -Raw "$scriptDir/.mvn/wrapper/maven-wrapper.properties" | ConvertFrom-StringData).distributionUrl
++if (!$distributionUrl) {
++  Write-Error "cannot read distributionUrl property in $scriptDir/.mvn/wrapper/maven-wrapper.properties"
++}
++
++switch -wildcard -casesensitive ( $($distributionUrl -replace '^.*/','') ) {
++  "maven-mvnd-*" {
++    $USE_MVND = $true
++    $distributionUrl = $distributionUrl -replace '-bin\.[^.]*$',"-windows-amd64.zip"
++    $MVN_CMD = "mvnd.cmd"
++    break
++  }
++  default {
++    $USE_MVND = $false
++    $MVN_CMD = $script -replace '^mvnw','mvn'
++    break
++  }
++}
++
++# apply MVNW_REPOURL and calculate MAVEN_HOME
++# maven home pattern: ~/.m2/wrapper/dists/{apache-maven-<version>,maven-mvnd-<version>-<platform>}/<hash>
++if ($env:MVNW_REPOURL) {
++  $MVNW_REPO_PATTERN = if ($USE_MVND) { "/org/apache/maven/" } else { "/maven/mvnd/" }
++  $distributionUrl = "$env:MVNW_REPOURL$MVNW_REPO_PATTERN$($distributionUrl -replace '^.*'+$MVNW_REPO_PATTERN,'')"
++}
++$distributionUrlName = $distributionUrl -replace '^.*/',''
++$distributionUrlNameMain = $distributionUrlName -replace '\.[^.]*$','' -replace '-bin$',''
++$MAVEN_HOME_PARENT = "$HOME/.m2/wrapper/dists/$distributionUrlNameMain"
++if ($env:MAVEN_USER_HOME) {
++  $MAVEN_HOME_PARENT = "$env:MAVEN_USER_HOME/wrapper/dists/$distributionUrlNameMain"
++}
++$MAVEN_HOME_NAME = ([System.Security.Cryptography.MD5]::Create().ComputeHash([byte[]][char[]]$distributionUrl) | ForEach-Object {$_.ToString("x2")}) -join ''
++$MAVEN_HOME = "$MAVEN_HOME_PARENT/$MAVEN_HOME_NAME"
++
++if (Test-Path -Path "$MAVEN_HOME" -PathType Container) {
++  Write-Verbose "found existing MAVEN_HOME at $MAVEN_HOME"
++  Write-Output "MVN_CMD=$MAVEN_HOME/bin/$MVN_CMD"
++  exit $?
++}
++
++if (! $distributionUrlNameMain -or ($distributionUrlName -eq $distributionUrlNameMain)) {
++  Write-Error "distributionUrl is not valid, must end with *-bin.zip, but found $distributionUrl"
++}
++
++# prepare tmp dir
++$TMP_DOWNLOAD_DIR_HOLDER = New-TemporaryFile
++$TMP_DOWNLOAD_DIR = New-Item -Itemtype Directory -Path "$TMP_DOWNLOAD_DIR_HOLDER.dir"
++$TMP_DOWNLOAD_DIR_HOLDER.Delete() | Out-Null
++trap {
++  if ($TMP_DOWNLOAD_DIR.Exists) {
++    try { Remove-Item $TMP_DOWNLOAD_DIR -Recurse -Force | Out-Null }
++    catch { Write-Warning "Cannot remove $TMP_DOWNLOAD_DIR" }
++  }
++}
++
++New-Item -Itemtype Directory -Path "$MAVEN_HOME_PARENT" -Force | Out-Null
++
++# Download and Install Apache Maven
++Write-Verbose "Couldn't find MAVEN_HOME, downloading and installing it ..."
++Write-Verbose "Downloading from: $distributionUrl"
++Write-Verbose "Downloading to: $TMP_DOWNLOAD_DIR/$distributionUrlName"
++
++$webclient = New-Object System.Net.WebClient
++if ($env:MVNW_USERNAME -and $env:MVNW_PASSWORD) {
++  $webclient.Credentials = New-Object System.Net.NetworkCredential($env:MVNW_USERNAME, $env:MVNW_PASSWORD)
++}
++[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
++$webclient.DownloadFile($distributionUrl, "$TMP_DOWNLOAD_DIR/$distributionUrlName") | Out-Null
++
++# If specified, validate the SHA-256 sum of the Maven distribution zip file
++$distributionSha256Sum = (Get-Content -Raw "$scriptDir/.mvn/wrapper/maven-wrapper.properties" | ConvertFrom-StringData).distributionSha256Sum
++if ($distributionSha256Sum) {
++  if ($USE_MVND) {
++    Write-Error "Checksum validation is not supported for maven-mvnd. `nPlease disable validation by removing 'distributionSha256Sum' from your maven-wrapper.properties."
++  }
++  Import-Module $PSHOME\Modules\Microsoft.PowerShell.Utility -Function Get-FileHash
++  if ((Get-FileHash "$TMP_DOWNLOAD_DIR/$distributionUrlName" -Algorithm SHA256).Hash.ToLower() -ne $distributionSha256Sum) {
++    Write-Error "Error: Failed to validate Maven distribution SHA-256, your Maven distribution might be compromised. If you updated your Maven version, you need to update the specified distributionSha256Sum property."
++  }
++}
++
++# unzip and move
++Expand-Archive "$TMP_DOWNLOAD_DIR/$distributionUrlName" -DestinationPath "$TMP_DOWNLOAD_DIR" | Out-Null
++Rename-Item -Path "$TMP_DOWNLOAD_DIR/$distributionUrlNameMain" -NewName $MAVEN_HOME_NAME | Out-Null
++try {
++  Move-Item -Path "$TMP_DOWNLOAD_DIR/$MAVEN_HOME_NAME" -Destination $MAVEN_HOME_PARENT | Out-Null
++} catch {
++  if (! (Test-Path -Path "$MAVEN_HOME" -PathType Container)) {
++    Write-Error "fail to move MAVEN_HOME"
++  }
++} finally {
++  try { Remove-Item $TMP_DOWNLOAD_DIR -Recurse -Force | Out-Null }
++  catch { Write-Warning "Cannot remove $TMP_DOWNLOAD_DIR" }
++}
++
++Write-Output "MVN_CMD=$MAVEN_HOME/bin/$MVN_CMD"
+Index: QuizService/QuizService/pom.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/QuizService/QuizService/pom.xml b/QuizService/QuizService/pom.xml
+new file mode 100644
+--- /dev/null	(revision a3588635740a06a8946ec51f6c69167ea2d62060)
++++ b/QuizService/QuizService/pom.xml	(revision a3588635740a06a8946ec51f6c69167ea2d62060)
+@@ -0,0 +1,99 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
++	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
++	<modelVersion>4.0.0</modelVersion>
++	<parent>
++		<groupId>org.springframework.boot</groupId>
++		<artifactId>spring-boot-starter-parent</artifactId>
++		<version>3.3.1</version>
++		<relativePath/> <!-- lookup parent from repository -->
++	</parent>
++	<groupId>com.quiz</groupId>
++	<artifactId>QuizService</artifactId>
++	<version>0.0.1-SNAPSHOT</version>
++	<name>QuizService</name>
++	<description>This is quiz service</description>
++	<url/>
++	<licenses>
++		<license/>
++	</licenses>
++	<developers>
++		<developer/>
++	</developers>
++	<scm>
++		<connection/>
++		<developerConnection/>
++		<tag/>
++		<url/>
++	</scm>
++	<properties>
++		<java.version>17</java.version>
++		<spring-cloud.version>2023.0.2</spring-cloud.version>
++	</properties>
++	<dependencies>
++		<dependency>
++			<groupId>org.springframework.boot</groupId>
++			<artifactId>spring-boot-starter-data-jpa</artifactId>
++		</dependency>
++		<dependency>
++			<groupId>org.springframework.boot</groupId>
++			<artifactId>spring-boot-starter-web</artifactId>
++		</dependency>
++
++		<dependency>
++			<groupId>com.mysql</groupId>
++			<artifactId>mysql-connector-j</artifactId>
++			<scope>runtime</scope>
++		</dependency>
++		<dependency>
++			<groupId>org.projectlombok</groupId>
++			<artifactId>lombok</artifactId>
++			<optional>true</optional>
++		</dependency>
++		<dependency>
++			<groupId>org.springframework.cloud</groupId>
++			<artifactId>spring-cloud-starter-openfeign</artifactId>
++		</dependency>
++		<dependency>
++			<groupId>org.springframework.cloud</groupId>
++			<artifactId>spring-cloud-starter-loadbalancer</artifactId>
++		</dependency>
++		<dependency>
++			<groupId>org.springframework.cloud</groupId>
++			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
++		</dependency>
++		<dependency>
++			<groupId>org.springframework.boot</groupId>
++			<artifactId>spring-boot-starter-test</artifactId>
++			<scope>test</scope>
++		</dependency>
++	</dependencies>
++	<dependencyManagement>
++		<dependencies>
++			<dependency>
++				<groupId>org.springframework.cloud</groupId>
++				<artifactId>spring-cloud-dependencies</artifactId>
++				<version>${spring-cloud.version}</version>
++				<type>pom</type>
++				<scope>import</scope>
++			</dependency>
++		</dependencies>
++	</dependencyManagement>
++	<build>
++		<plugins>
++			<plugin>
++				<groupId>org.springframework.boot</groupId>
++				<artifactId>spring-boot-maven-plugin</artifactId>
++				<configuration>
++					<excludes>
++						<exclude>
++							<groupId>org.projectlombok</groupId>
++							<artifactId>lombok</artifactId>
++						</exclude>
++					</excludes>
++				</configuration>
++			</plugin>
++		</plugins>
++	</build>
++
++</project>
+Index: QuizService/QuizService/src/main/java/com/quiz/QuizServiceApplication.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/QuizService/QuizService/src/main/java/com/quiz/QuizServiceApplication.java b/QuizService/QuizService/src/main/java/com/quiz/QuizServiceApplication.java
+new file mode 100644
+--- /dev/null	(revision a3588635740a06a8946ec51f6c69167ea2d62060)
++++ b/QuizService/QuizService/src/main/java/com/quiz/QuizServiceApplication.java	(revision a3588635740a06a8946ec51f6c69167ea2d62060)
+@@ -0,0 +1,15 @@
++package com.quiz;
++
++import org.springframework.boot.SpringApplication;
++import org.springframework.boot.autoconfigure.SpringBootApplication;
++import org.springframework.cloud.openfeign.EnableFeignClients;
++
++@SpringBootApplication
++@EnableFeignClients
++public class QuizServiceApplication {
++
++	public static void main(String[] args) {
++		SpringApplication.run(QuizServiceApplication.class, args);
++	}
++
++}
+Index: QuizService/QuizService/src/main/java/com/quiz/controllers/QuizController.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/QuizService/QuizService/src/main/java/com/quiz/controllers/QuizController.java b/QuizService/QuizService/src/main/java/com/quiz/controllers/QuizController.java
+new file mode 100644
+--- /dev/null	(revision a3588635740a06a8946ec51f6c69167ea2d62060)
++++ b/QuizService/QuizService/src/main/java/com/quiz/controllers/QuizController.java	(revision a3588635740a06a8946ec51f6c69167ea2d62060)
+@@ -0,0 +1,40 @@
++package com.quiz.controllers;
++
++
++import com.quiz.entities.Quiz;
++import com.quiz.services.QuizService;
++import org.springframework.beans.factory.annotation.Autowired;
++import org.springframework.web.bind.annotation.*;
++
++import java.util.List;
++
++@RestController
++@RequestMapping("/quiz")
++public class QuizController {
++
++    @Autowired
++    private QuizService quizService;
++
++    public QuizController(QuizService quizService) {
++        this.quizService = quizService;
++    }
++
++    //create
++    @PostMapping
++    public Quiz create(@RequestBody Quiz quiz){
++        return quizService.add(quiz);
++    }
++
++    //getAll
++    @GetMapping
++    public List<Quiz> get(){
++        return quizService.get();
++    }
++
++    @GetMapping("/{id}")
++    public Quiz getOne(@PathVariable Long id){
++        return quizService.get(id);
++    }
++
++
++}
+Index: QuizService/QuizService/src/main/java/com/quiz/entities/Question.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/QuizService/QuizService/src/main/java/com/quiz/entities/Question.java b/QuizService/QuizService/src/main/java/com/quiz/entities/Question.java
+new file mode 100644
+--- /dev/null	(revision a3588635740a06a8946ec51f6c69167ea2d62060)
++++ b/QuizService/QuizService/src/main/java/com/quiz/entities/Question.java	(revision a3588635740a06a8946ec51f6c69167ea2d62060)
+@@ -0,0 +1,25 @@
++package com.quiz.entities;
++
++import jakarta.persistence.Entity;
++import jakarta.persistence.GeneratedValue;
++import jakarta.persistence.GenerationType;
++import jakarta.persistence.Id;
++import lombok.AllArgsConstructor;
++import lombok.Getter;
++import lombok.NoArgsConstructor;
++import lombok.Setter;
++
++
++@Getter
++@Setter
++@AllArgsConstructor
++@NoArgsConstructor
++public class Question {
++
++
++    private Long quwstionId;
++
++    private String question;
++
++    private Long quizId;
++}
+Index: QuizService/QuizService/src/main/java/com/quiz/entities/Quiz.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/QuizService/QuizService/src/main/java/com/quiz/entities/Quiz.java b/QuizService/QuizService/src/main/java/com/quiz/entities/Quiz.java
+new file mode 100644
+--- /dev/null	(revision a3588635740a06a8946ec51f6c69167ea2d62060)
++++ b/QuizService/QuizService/src/main/java/com/quiz/entities/Quiz.java	(revision a3588635740a06a8946ec51f6c69167ea2d62060)
+@@ -0,0 +1,30 @@
++package com.quiz.entities;
++
++
++import jakarta.persistence.Entity;
++import jakarta.persistence.GeneratedValue;
++import jakarta.persistence.GenerationType;
++import jakarta.persistence.Id;
++import lombok.AllArgsConstructor;
++import lombok.Getter;
++import lombok.NoArgsConstructor;
++import lombok.Setter;
++
++import java.util.List;
++
++@Entity
++@Getter
++@Setter
++@AllArgsConstructor
++@NoArgsConstructor
++public class Quiz {
++
++    @Id
++    @GeneratedValue(strategy = GenerationType.IDENTITY)
++    private Long id;
++    private String title;
++
++    transient private List<Question> questions;
++
++
++}
+Index: QuizService/QuizService/src/main/java/com/quiz/repositories/QuizRepository.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/QuizService/QuizService/src/main/java/com/quiz/repositories/QuizRepository.java b/QuizService/QuizService/src/main/java/com/quiz/repositories/QuizRepository.java
+new file mode 100644
+--- /dev/null	(revision a3588635740a06a8946ec51f6c69167ea2d62060)
++++ b/QuizService/QuizService/src/main/java/com/quiz/repositories/QuizRepository.java	(revision a3588635740a06a8946ec51f6c69167ea2d62060)
+@@ -0,0 +1,7 @@
++package com.quiz.repositories;
++
++import com.quiz.entities.Quiz;
++import org.springframework.data.jpa.repository.JpaRepository;
++
++public interface QuizRepository extends JpaRepository<Quiz, Long> {
++}
+Index: QuizService/QuizService/src/main/java/com/quiz/services/QuestionClient.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/QuizService/QuizService/src/main/java/com/quiz/services/QuestionClient.java b/QuizService/QuizService/src/main/java/com/quiz/services/QuestionClient.java
+new file mode 100644
+--- /dev/null	(revision a3588635740a06a8946ec51f6c69167ea2d62060)
++++ b/QuizService/QuizService/src/main/java/com/quiz/services/QuestionClient.java	(revision a3588635740a06a8946ec51f6c69167ea2d62060)
+@@ -0,0 +1,18 @@
++package com.quiz.services;
++
++
++import com.quiz.entities.Question;
++import org.springframework.cloud.openfeign.FeignClient;
++import org.springframework.web.bind.annotation.GetMapping;
++import org.springframework.web.bind.annotation.PathVariable;
++
++import java.util.List;
++
++//@FeignClient(url="http://localhost:8082",value="Question-Client")
++@FeignClient(name="QUESTION-SERVICE")
++public interface QuestionClient {
++
++    @GetMapping("/question/quiz/{quizId}")
++    List<Question> getQuestionOfQuiz(@PathVariable Long quizId);
++
++}
+Index: QuizService/QuizService/src/main/java/com/quiz/services/QuizService.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/QuizService/QuizService/src/main/java/com/quiz/services/QuizService.java b/QuizService/QuizService/src/main/java/com/quiz/services/QuizService.java
+new file mode 100644
+--- /dev/null	(revision a3588635740a06a8946ec51f6c69167ea2d62060)
++++ b/QuizService/QuizService/src/main/java/com/quiz/services/QuizService.java	(revision a3588635740a06a8946ec51f6c69167ea2d62060)
+@@ -0,0 +1,16 @@
++package com.quiz.services;
++
++import com.quiz.entities.Quiz;
++
++
++import java.util.List;
++
++
++public interface QuizService {
++
++    Quiz add(Quiz quiz);
++
++    List<Quiz> get();
++
++    Quiz get(Long id);
++}
+Index: QuizService/QuizService/src/main/java/com/quiz/services/impl/QuizServiceImpl.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/QuizService/QuizService/src/main/java/com/quiz/services/impl/QuizServiceImpl.java b/QuizService/QuizService/src/main/java/com/quiz/services/impl/QuizServiceImpl.java
+new file mode 100644
+--- /dev/null	(revision a3588635740a06a8946ec51f6c69167ea2d62060)
++++ b/QuizService/QuizService/src/main/java/com/quiz/services/impl/QuizServiceImpl.java	(revision a3588635740a06a8946ec51f6c69167ea2d62060)
+@@ -0,0 +1,49 @@
++package com.quiz.services.impl;
++
++import com.quiz.entities.Quiz;
++import com.quiz.repositories.QuizRepository;
++import com.quiz.services.QuestionClient;
++import com.quiz.services.QuizService;
++import org.springframework.stereotype.Service;
++
++import java.util.Collections;
++import java.util.List;
++import java.util.stream.Collectors;
++
++@Service
++public class QuizServiceImpl implements QuizService {
++
++
++    private QuizRepository quizRepository;
++
++    private QuestionClient questionClient;
++
++    public QuizServiceImpl(QuizRepository quizRepository, QuestionClient questionClient) {
++        this.quizRepository = quizRepository;
++        this.questionClient = questionClient;
++    }
++
++    @Override
++    public Quiz add(Quiz quiz) {
++        return quizRepository.save(quiz);
++    }
++
++    @Override
++    public List<Quiz> get() {
++        List<Quiz> quizzes=quizRepository.findAll();
++
++        List<Quiz> newQuizList=  quizzes.stream().map(quiz ->{
++           quiz.setQuestions(questionClient.getQuestionOfQuiz(quiz.getId()));
++            return quiz;
++
++        } ).collect(Collectors.toList());
++        return newQuizList ;
++    }
++
++    @Override
++    public Quiz get(Long id) {
++        Quiz quiz =quizRepository.findById(id).orElseThrow(()-> new RuntimeException("Quiz Not Found"));
++        quiz.setQuestions(questionClient.getQuestionOfQuiz(quiz.getId()));
++        return quiz  ;
++    }
++}
+Index: QuizService/QuizService/src/main/resources/application.properties
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>ISO-8859-1
+===================================================================
+diff --git a/QuizService/QuizService/src/main/resources/application.properties b/QuizService/QuizService/src/main/resources/application.properties
+new file mode 100644
+--- /dev/null	(revision a3588635740a06a8946ec51f6c69167ea2d62060)
++++ b/QuizService/QuizService/src/main/resources/application.properties	(revision a3588635740a06a8946ec51f6c69167ea2d62060)
+@@ -0,0 +1,13 @@
++
++
++spring.application.name=QUIZ-SERVICE
++server.port=8081
++
++spring.jpa.hibernate.ddl-auto=update
++spring.datasource.url=jdbc:mysql://localhost:3306/micro_yt
++spring.datasource.username=root
++spring.datasource.password=root
++
++spring.jpa.show-sql=true
++
++eureka.instance.client.serverUrl.defaultZone=http://localhost:8761/eureka/
+\ No newline at end of file
+Index: QuizService/QuizService/src/test/java/com/quiz/QuizServiceApplicationTests.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/QuizService/QuizService/src/test/java/com/quiz/QuizServiceApplicationTests.java b/QuizService/QuizService/src/test/java/com/quiz/QuizServiceApplicationTests.java
+new file mode 100644
+--- /dev/null	(revision a3588635740a06a8946ec51f6c69167ea2d62060)
++++ b/QuizService/QuizService/src/test/java/com/quiz/QuizServiceApplicationTests.java	(revision a3588635740a06a8946ec51f6c69167ea2d62060)
+@@ -0,0 +1,13 @@
++package com.quiz;
++
++import org.junit.jupiter.api.Test;
++import org.springframework.boot.test.context.SpringBootTest;
++
++@SpringBootTest
++class QuizServiceApplicationTests {
++
++	@Test
++	void contextLoads() {
++	}
++
++}
+Index: ServiceRegistry/ServiceRegistry/.gitignore
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/ServiceRegistry/ServiceRegistry/.gitignore b/ServiceRegistry/ServiceRegistry/.gitignore
+new file mode 100644
+--- /dev/null	(revision a3588635740a06a8946ec51f6c69167ea2d62060)
++++ b/ServiceRegistry/ServiceRegistry/.gitignore	(revision a3588635740a06a8946ec51f6c69167ea2d62060)
+@@ -0,0 +1,33 @@
++HELP.md
++target/
++!.mvn/wrapper/maven-wrapper.jar
++!**/src/main/**/target/
++!**/src/test/**/target/
++
++### STS ###
++.apt_generated
++.classpath
++.factorypath
++.project
++.settings
++.springBeans
++.sts4-cache
++
++### IntelliJ IDEA ###
++.idea
++*.iws
++*.iml
++*.ipr
++
++### NetBeans ###
++/nbproject/private/
++/nbbuild/
++/dist/
++/nbdist/
++/.nb-gradle/
++build/
++!**/src/main/**/build/
++!**/src/test/**/build/
++
++### VS Code ###
++.vscode/
+Index: ServiceRegistry/ServiceRegistry/.mvn/wrapper/maven-wrapper.properties
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>ISO-8859-1
+===================================================================
+diff --git a/ServiceRegistry/ServiceRegistry/.mvn/wrapper/maven-wrapper.properties b/ServiceRegistry/ServiceRegistry/.mvn/wrapper/maven-wrapper.properties
+new file mode 100644
+--- /dev/null	(revision a3588635740a06a8946ec51f6c69167ea2d62060)
++++ b/ServiceRegistry/ServiceRegistry/.mvn/wrapper/maven-wrapper.properties	(revision a3588635740a06a8946ec51f6c69167ea2d62060)
+@@ -0,0 +1,19 @@
++# Licensed to the Apache Software Foundation (ASF) under one
++# or more contributor license agreements.  See the NOTICE file
++# distributed with this work for additional information
++# regarding copyright ownership.  The ASF licenses this file
++# to you under the Apache License, Version 2.0 (the
++# "License"); you may not use this file except in compliance
++# with the License.  You may obtain a copy of the License at
++#
++#   https://www.apache.org/licenses/LICENSE-2.0
++#
++# Unless required by applicable law or agreed to in writing,
++# software distributed under the License is distributed on an
++# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
++# KIND, either express or implied.  See the License for the
++# specific language governing permissions and limitations
++# under the License.
++wrapperVersion=3.3.2
++distributionType=only-script
++distributionUrl=https://repo.maven.apache.org/maven2/org/apache/maven/apache-maven/3.9.7/apache-maven-3.9.7-bin.zip
+Index: ServiceRegistry/ServiceRegistry/mvnw
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/ServiceRegistry/ServiceRegistry/mvnw b/ServiceRegistry/ServiceRegistry/mvnw
+new file mode 100644
+--- /dev/null	(revision a3588635740a06a8946ec51f6c69167ea2d62060)
++++ b/ServiceRegistry/ServiceRegistry/mvnw	(revision a3588635740a06a8946ec51f6c69167ea2d62060)
+@@ -0,0 +1,259 @@
++#!/bin/sh
++# ----------------------------------------------------------------------------
++# Licensed to the Apache Software Foundation (ASF) under one
++# or more contributor license agreements.  See the NOTICE file
++# distributed with this work for additional information
++# regarding copyright ownership.  The ASF licenses this file
++# to you under the Apache License, Version 2.0 (the
++# "License"); you may not use this file except in compliance
++# with the License.  You may obtain a copy of the License at
++#
++#    https://www.apache.org/licenses/LICENSE-2.0
++#
++# Unless required by applicable law or agreed to in writing,
++# software distributed under the License is distributed on an
++# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
++# KIND, either express or implied.  See the License for the
++# specific language governing permissions and limitations
++# under the License.
++# ----------------------------------------------------------------------------
++
++# ----------------------------------------------------------------------------
++# Apache Maven Wrapper startup batch script, version 3.3.2
++#
++# Optional ENV vars
++# -----------------
++#   JAVA_HOME - location of a JDK home dir, required when download maven via java source
++#   MVNW_REPOURL - repo url base for downloading maven distribution
++#   MVNW_USERNAME/MVNW_PASSWORD - user and password for downloading maven
++#   MVNW_VERBOSE - true: enable verbose log; debug: trace the mvnw script; others: silence the output
++# ----------------------------------------------------------------------------
++
++set -euf
++[ "${MVNW_VERBOSE-}" != debug ] || set -x
++
++# OS specific support.
++native_path() { printf %s\\n "$1"; }
++case "$(uname)" in
++CYGWIN* | MINGW*)
++  [ -z "${JAVA_HOME-}" ] || JAVA_HOME="$(cygpath --unix "$JAVA_HOME")"
++  native_path() { cygpath --path --windows "$1"; }
++  ;;
++esac
++
++# set JAVACMD and JAVACCMD
++set_java_home() {
++  # For Cygwin and MinGW, ensure paths are in Unix format before anything is touched
++  if [ -n "${JAVA_HOME-}" ]; then
++    if [ -x "$JAVA_HOME/jre/sh/java" ]; then
++      # IBM's JDK on AIX uses strange locations for the executables
++      JAVACMD="$JAVA_HOME/jre/sh/java"
++      JAVACCMD="$JAVA_HOME/jre/sh/javac"
++    else
++      JAVACMD="$JAVA_HOME/bin/java"
++      JAVACCMD="$JAVA_HOME/bin/javac"
++
++      if [ ! -x "$JAVACMD" ] || [ ! -x "$JAVACCMD" ]; then
++        echo "The JAVA_HOME environment variable is not defined correctly, so mvnw cannot run." >&2
++        echo "JAVA_HOME is set to \"$JAVA_HOME\", but \"\$JAVA_HOME/bin/java\" or \"\$JAVA_HOME/bin/javac\" does not exist." >&2
++        return 1
++      fi
++    fi
++  else
++    JAVACMD="$(
++      'set' +e
++      'unset' -f command 2>/dev/null
++      'command' -v java
++    )" || :
++    JAVACCMD="$(
++      'set' +e
++      'unset' -f command 2>/dev/null
++      'command' -v javac
++    )" || :
++
++    if [ ! -x "${JAVACMD-}" ] || [ ! -x "${JAVACCMD-}" ]; then
++      echo "The java/javac command does not exist in PATH nor is JAVA_HOME set, so mvnw cannot run." >&2
++      return 1
++    fi
++  fi
++}
++
++# hash string like Java String::hashCode
++hash_string() {
++  str="${1:-}" h=0
++  while [ -n "$str" ]; do
++    char="${str%"${str#?}"}"
++    h=$(((h * 31 + $(LC_CTYPE=C printf %d "'$char")) % 4294967296))
++    str="${str#?}"
++  done
++  printf %x\\n $h
++}
++
++verbose() { :; }
++[ "${MVNW_VERBOSE-}" != true ] || verbose() { printf %s\\n "${1-}"; }
++
++die() {
++  printf %s\\n "$1" >&2
++  exit 1
++}
++
++trim() {
++  # MWRAPPER-139:
++  #   Trims trailing and leading whitespace, carriage returns, tabs, and linefeeds.
++  #   Needed for removing poorly interpreted newline sequences when running in more
++  #   exotic environments such as mingw bash on Windows.
++  printf "%s" "${1}" | tr -d '[:space:]'
++}
++
++# parse distributionUrl and optional distributionSha256Sum, requires .mvn/wrapper/maven-wrapper.properties
++while IFS="=" read -r key value; do
++  case "${key-}" in
++  distributionUrl) distributionUrl=$(trim "${value-}") ;;
++  distributionSha256Sum) distributionSha256Sum=$(trim "${value-}") ;;
++  esac
++done <"${0%/*}/.mvn/wrapper/maven-wrapper.properties"
++[ -n "${distributionUrl-}" ] || die "cannot read distributionUrl property in ${0%/*}/.mvn/wrapper/maven-wrapper.properties"
++
++case "${distributionUrl##*/}" in
++maven-mvnd-*bin.*)
++  MVN_CMD=mvnd.sh _MVNW_REPO_PATTERN=/maven/mvnd/
++  case "${PROCESSOR_ARCHITECTURE-}${PROCESSOR_ARCHITEW6432-}:$(uname -a)" in
++  *AMD64:CYGWIN* | *AMD64:MINGW*) distributionPlatform=windows-amd64 ;;
++  :Darwin*x86_64) distributionPlatform=darwin-amd64 ;;
++  :Darwin*arm64) distributionPlatform=darwin-aarch64 ;;
++  :Linux*x86_64*) distributionPlatform=linux-amd64 ;;
++  *)
++    echo "Cannot detect native platform for mvnd on $(uname)-$(uname -m), use pure java version" >&2
++    distributionPlatform=linux-amd64
++    ;;
++  esac
++  distributionUrl="${distributionUrl%-bin.*}-$distributionPlatform.zip"
++  ;;
++maven-mvnd-*) MVN_CMD=mvnd.sh _MVNW_REPO_PATTERN=/maven/mvnd/ ;;
++*) MVN_CMD="mvn${0##*/mvnw}" _MVNW_REPO_PATTERN=/org/apache/maven/ ;;
++esac
++
++# apply MVNW_REPOURL and calculate MAVEN_HOME
++# maven home pattern: ~/.m2/wrapper/dists/{apache-maven-<version>,maven-mvnd-<version>-<platform>}/<hash>
++[ -z "${MVNW_REPOURL-}" ] || distributionUrl="$MVNW_REPOURL$_MVNW_REPO_PATTERN${distributionUrl#*"$_MVNW_REPO_PATTERN"}"
++distributionUrlName="${distributionUrl##*/}"
++distributionUrlNameMain="${distributionUrlName%.*}"
++distributionUrlNameMain="${distributionUrlNameMain%-bin}"
++MAVEN_USER_HOME="${MAVEN_USER_HOME:-${HOME}/.m2}"
++MAVEN_HOME="${MAVEN_USER_HOME}/wrapper/dists/${distributionUrlNameMain-}/$(hash_string "$distributionUrl")"
++
++exec_maven() {
++  unset MVNW_VERBOSE MVNW_USERNAME MVNW_PASSWORD MVNW_REPOURL || :
++  exec "$MAVEN_HOME/bin/$MVN_CMD" "$@" || die "cannot exec $MAVEN_HOME/bin/$MVN_CMD"
++}
++
++if [ -d "$MAVEN_HOME" ]; then
++  verbose "found existing MAVEN_HOME at $MAVEN_HOME"
++  exec_maven "$@"
++fi
++
++case "${distributionUrl-}" in
++*?-bin.zip | *?maven-mvnd-?*-?*.zip) ;;
++*) die "distributionUrl is not valid, must match *-bin.zip or maven-mvnd-*.zip, but found '${distributionUrl-}'" ;;
++esac
++
++# prepare tmp dir
++if TMP_DOWNLOAD_DIR="$(mktemp -d)" && [ -d "$TMP_DOWNLOAD_DIR" ]; then
++  clean() { rm -rf -- "$TMP_DOWNLOAD_DIR"; }
++  trap clean HUP INT TERM EXIT
++else
++  die "cannot create temp dir"
++fi
++
++mkdir -p -- "${MAVEN_HOME%/*}"
++
++# Download and Install Apache Maven
++verbose "Couldn't find MAVEN_HOME, downloading and installing it ..."
++verbose "Downloading from: $distributionUrl"
++verbose "Downloading to: $TMP_DOWNLOAD_DIR/$distributionUrlName"
++
++# select .zip or .tar.gz
++if ! command -v unzip >/dev/null; then
++  distributionUrl="${distributionUrl%.zip}.tar.gz"
++  distributionUrlName="${distributionUrl##*/}"
++fi
++
++# verbose opt
++__MVNW_QUIET_WGET=--quiet __MVNW_QUIET_CURL=--silent __MVNW_QUIET_UNZIP=-q __MVNW_QUIET_TAR=''
++[ "${MVNW_VERBOSE-}" != true ] || __MVNW_QUIET_WGET='' __MVNW_QUIET_CURL='' __MVNW_QUIET_UNZIP='' __MVNW_QUIET_TAR=v
++
++# normalize http auth
++case "${MVNW_PASSWORD:+has-password}" in
++'') MVNW_USERNAME='' MVNW_PASSWORD='' ;;
++has-password) [ -n "${MVNW_USERNAME-}" ] || MVNW_USERNAME='' MVNW_PASSWORD='' ;;
++esac
++
++if [ -z "${MVNW_USERNAME-}" ] && command -v wget >/dev/null; then
++  verbose "Found wget ... using wget"
++  wget ${__MVNW_QUIET_WGET:+"$__MVNW_QUIET_WGET"} "$distributionUrl" -O "$TMP_DOWNLOAD_DIR/$distributionUrlName" || die "wget: Failed to fetch $distributionUrl"
++elif [ -z "${MVNW_USERNAME-}" ] && command -v curl >/dev/null; then
++  verbose "Found curl ... using curl"
++  curl ${__MVNW_QUIET_CURL:+"$__MVNW_QUIET_CURL"} -f -L -o "$TMP_DOWNLOAD_DIR/$distributionUrlName" "$distributionUrl" || die "curl: Failed to fetch $distributionUrl"
++elif set_java_home; then
++  verbose "Falling back to use Java to download"
++  javaSource="$TMP_DOWNLOAD_DIR/Downloader.java"
++  targetZip="$TMP_DOWNLOAD_DIR/$distributionUrlName"
++  cat >"$javaSource" <<-END
++	public class Downloader extends java.net.Authenticator
++	{
++	  protected java.net.PasswordAuthentication getPasswordAuthentication()
++	  {
++	    return new java.net.PasswordAuthentication( System.getenv( "MVNW_USERNAME" ), System.getenv( "MVNW_PASSWORD" ).toCharArray() );
++	  }
++	  public static void main( String[] args ) throws Exception
++	  {
++	    setDefault( new Downloader() );
++	    java.nio.file.Files.copy( java.net.URI.create( args[0] ).toURL().openStream(), java.nio.file.Paths.get( args[1] ).toAbsolutePath().normalize() );
++	  }
++	}
++	END
++  # For Cygwin/MinGW, switch paths to Windows format before running javac and java
++  verbose " - Compiling Downloader.java ..."
++  "$(native_path "$JAVACCMD")" "$(native_path "$javaSource")" || die "Failed to compile Downloader.java"
++  verbose " - Running Downloader.java ..."
++  "$(native_path "$JAVACMD")" -cp "$(native_path "$TMP_DOWNLOAD_DIR")" Downloader "$distributionUrl" "$(native_path "$targetZip")"
++fi
++
++# If specified, validate the SHA-256 sum of the Maven distribution zip file
++if [ -n "${distributionSha256Sum-}" ]; then
++  distributionSha256Result=false
++  if [ "$MVN_CMD" = mvnd.sh ]; then
++    echo "Checksum validation is not supported for maven-mvnd." >&2
++    echo "Please disable validation by removing 'distributionSha256Sum' from your maven-wrapper.properties." >&2
++    exit 1
++  elif command -v sha256sum >/dev/null; then
++    if echo "$distributionSha256Sum  $TMP_DOWNLOAD_DIR/$distributionUrlName" | sha256sum -c >/dev/null 2>&1; then
++      distributionSha256Result=true
++    fi
++  elif command -v shasum >/dev/null; then
++    if echo "$distributionSha256Sum  $TMP_DOWNLOAD_DIR/$distributionUrlName" | shasum -a 256 -c >/dev/null 2>&1; then
++      distributionSha256Result=true
++    fi
++  else
++    echo "Checksum validation was requested but neither 'sha256sum' or 'shasum' are available." >&2
++    echo "Please install either command, or disable validation by removing 'distributionSha256Sum' from your maven-wrapper.properties." >&2
++    exit 1
++  fi
++  if [ $distributionSha256Result = false ]; then
++    echo "Error: Failed to validate Maven distribution SHA-256, your Maven distribution might be compromised." >&2
++    echo "If you updated your Maven version, you need to update the specified distributionSha256Sum property." >&2
++    exit 1
++  fi
++fi
++
++# unzip and move
++if command -v unzip >/dev/null; then
++  unzip ${__MVNW_QUIET_UNZIP:+"$__MVNW_QUIET_UNZIP"} "$TMP_DOWNLOAD_DIR/$distributionUrlName" -d "$TMP_DOWNLOAD_DIR" || die "failed to unzip"
++else
++  tar xzf${__MVNW_QUIET_TAR:+"$__MVNW_QUIET_TAR"} "$TMP_DOWNLOAD_DIR/$distributionUrlName" -C "$TMP_DOWNLOAD_DIR" || die "failed to untar"
++fi
++printf %s\\n "$distributionUrl" >"$TMP_DOWNLOAD_DIR/$distributionUrlNameMain/mvnw.url"
++mv -- "$TMP_DOWNLOAD_DIR/$distributionUrlNameMain" "$MAVEN_HOME" || [ -d "$MAVEN_HOME" ] || die "fail to move MAVEN_HOME"
++
++clean || :
++exec_maven "$@"
+Index: ServiceRegistry/ServiceRegistry/mvnw.cmd
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/ServiceRegistry/ServiceRegistry/mvnw.cmd b/ServiceRegistry/ServiceRegistry/mvnw.cmd
+new file mode 100644
+--- /dev/null	(revision a3588635740a06a8946ec51f6c69167ea2d62060)
++++ b/ServiceRegistry/ServiceRegistry/mvnw.cmd	(revision a3588635740a06a8946ec51f6c69167ea2d62060)
+@@ -0,0 +1,149 @@
++<# : batch portion
++@REM ----------------------------------------------------------------------------
++@REM Licensed to the Apache Software Foundation (ASF) under one
++@REM or more contributor license agreements.  See the NOTICE file
++@REM distributed with this work for additional information
++@REM regarding copyright ownership.  The ASF licenses this file
++@REM to you under the Apache License, Version 2.0 (the
++@REM "License"); you may not use this file except in compliance
++@REM with the License.  You may obtain a copy of the License at
++@REM
++@REM    https://www.apache.org/licenses/LICENSE-2.0
++@REM
++@REM Unless required by applicable law or agreed to in writing,
++@REM software distributed under the License is distributed on an
++@REM "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
++@REM KIND, either express or implied.  See the License for the
++@REM specific language governing permissions and limitations
++@REM under the License.
++@REM ----------------------------------------------------------------------------
++
++@REM ----------------------------------------------------------------------------
++@REM Apache Maven Wrapper startup batch script, version 3.3.2
++@REM
++@REM Optional ENV vars
++@REM   MVNW_REPOURL - repo url base for downloading maven distribution
++@REM   MVNW_USERNAME/MVNW_PASSWORD - user and password for downloading maven
++@REM   MVNW_VERBOSE - true: enable verbose log; others: silence the output
++@REM ----------------------------------------------------------------------------
++
++@IF "%__MVNW_ARG0_NAME__%"=="" (SET __MVNW_ARG0_NAME__=%~nx0)
++@SET __MVNW_CMD__=
++@SET __MVNW_ERROR__=
++@SET __MVNW_PSMODULEP_SAVE=%PSModulePath%
++@SET PSModulePath=
++@FOR /F "usebackq tokens=1* delims==" %%A IN (`powershell -noprofile "& {$scriptDir='%~dp0'; $script='%__MVNW_ARG0_NAME__%'; icm -ScriptBlock ([Scriptblock]::Create((Get-Content -Raw '%~f0'))) -NoNewScope}"`) DO @(
++  IF "%%A"=="MVN_CMD" (set __MVNW_CMD__=%%B) ELSE IF "%%B"=="" (echo %%A) ELSE (echo %%A=%%B)
++)
++@SET PSModulePath=%__MVNW_PSMODULEP_SAVE%
++@SET __MVNW_PSMODULEP_SAVE=
++@SET __MVNW_ARG0_NAME__=
++@SET MVNW_USERNAME=
++@SET MVNW_PASSWORD=
++@IF NOT "%__MVNW_CMD__%"=="" (%__MVNW_CMD__% %*)
++@echo Cannot start maven from wrapper >&2 && exit /b 1
++@GOTO :EOF
++: end batch / begin powershell #>
++
++$ErrorActionPreference = "Stop"
++if ($env:MVNW_VERBOSE -eq "true") {
++  $VerbosePreference = "Continue"
++}
++
++# calculate distributionUrl, requires .mvn/wrapper/maven-wrapper.properties
++$distributionUrl = (Get-Content -Raw "$scriptDir/.mvn/wrapper/maven-wrapper.properties" | ConvertFrom-StringData).distributionUrl
++if (!$distributionUrl) {
++  Write-Error "cannot read distributionUrl property in $scriptDir/.mvn/wrapper/maven-wrapper.properties"
++}
++
++switch -wildcard -casesensitive ( $($distributionUrl -replace '^.*/','') ) {
++  "maven-mvnd-*" {
++    $USE_MVND = $true
++    $distributionUrl = $distributionUrl -replace '-bin\.[^.]*$',"-windows-amd64.zip"
++    $MVN_CMD = "mvnd.cmd"
++    break
++  }
++  default {
++    $USE_MVND = $false
++    $MVN_CMD = $script -replace '^mvnw','mvn'
++    break
++  }
++}
++
++# apply MVNW_REPOURL and calculate MAVEN_HOME
++# maven home pattern: ~/.m2/wrapper/dists/{apache-maven-<version>,maven-mvnd-<version>-<platform>}/<hash>
++if ($env:MVNW_REPOURL) {
++  $MVNW_REPO_PATTERN = if ($USE_MVND) { "/org/apache/maven/" } else { "/maven/mvnd/" }
++  $distributionUrl = "$env:MVNW_REPOURL$MVNW_REPO_PATTERN$($distributionUrl -replace '^.*'+$MVNW_REPO_PATTERN,'')"
++}
++$distributionUrlName = $distributionUrl -replace '^.*/',''
++$distributionUrlNameMain = $distributionUrlName -replace '\.[^.]*$','' -replace '-bin$',''
++$MAVEN_HOME_PARENT = "$HOME/.m2/wrapper/dists/$distributionUrlNameMain"
++if ($env:MAVEN_USER_HOME) {
++  $MAVEN_HOME_PARENT = "$env:MAVEN_USER_HOME/wrapper/dists/$distributionUrlNameMain"
++}
++$MAVEN_HOME_NAME = ([System.Security.Cryptography.MD5]::Create().ComputeHash([byte[]][char[]]$distributionUrl) | ForEach-Object {$_.ToString("x2")}) -join ''
++$MAVEN_HOME = "$MAVEN_HOME_PARENT/$MAVEN_HOME_NAME"
++
++if (Test-Path -Path "$MAVEN_HOME" -PathType Container) {
++  Write-Verbose "found existing MAVEN_HOME at $MAVEN_HOME"
++  Write-Output "MVN_CMD=$MAVEN_HOME/bin/$MVN_CMD"
++  exit $?
++}
++
++if (! $distributionUrlNameMain -or ($distributionUrlName -eq $distributionUrlNameMain)) {
++  Write-Error "distributionUrl is not valid, must end with *-bin.zip, but found $distributionUrl"
++}
++
++# prepare tmp dir
++$TMP_DOWNLOAD_DIR_HOLDER = New-TemporaryFile
++$TMP_DOWNLOAD_DIR = New-Item -Itemtype Directory -Path "$TMP_DOWNLOAD_DIR_HOLDER.dir"
++$TMP_DOWNLOAD_DIR_HOLDER.Delete() | Out-Null
++trap {
++  if ($TMP_DOWNLOAD_DIR.Exists) {
++    try { Remove-Item $TMP_DOWNLOAD_DIR -Recurse -Force | Out-Null }
++    catch { Write-Warning "Cannot remove $TMP_DOWNLOAD_DIR" }
++  }
++}
++
++New-Item -Itemtype Directory -Path "$MAVEN_HOME_PARENT" -Force | Out-Null
++
++# Download and Install Apache Maven
++Write-Verbose "Couldn't find MAVEN_HOME, downloading and installing it ..."
++Write-Verbose "Downloading from: $distributionUrl"
++Write-Verbose "Downloading to: $TMP_DOWNLOAD_DIR/$distributionUrlName"
++
++$webclient = New-Object System.Net.WebClient
++if ($env:MVNW_USERNAME -and $env:MVNW_PASSWORD) {
++  $webclient.Credentials = New-Object System.Net.NetworkCredential($env:MVNW_USERNAME, $env:MVNW_PASSWORD)
++}
++[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
++$webclient.DownloadFile($distributionUrl, "$TMP_DOWNLOAD_DIR/$distributionUrlName") | Out-Null
++
++# If specified, validate the SHA-256 sum of the Maven distribution zip file
++$distributionSha256Sum = (Get-Content -Raw "$scriptDir/.mvn/wrapper/maven-wrapper.properties" | ConvertFrom-StringData).distributionSha256Sum
++if ($distributionSha256Sum) {
++  if ($USE_MVND) {
++    Write-Error "Checksum validation is not supported for maven-mvnd. `nPlease disable validation by removing 'distributionSha256Sum' from your maven-wrapper.properties."
++  }
++  Import-Module $PSHOME\Modules\Microsoft.PowerShell.Utility -Function Get-FileHash
++  if ((Get-FileHash "$TMP_DOWNLOAD_DIR/$distributionUrlName" -Algorithm SHA256).Hash.ToLower() -ne $distributionSha256Sum) {
++    Write-Error "Error: Failed to validate Maven distribution SHA-256, your Maven distribution might be compromised. If you updated your Maven version, you need to update the specified distributionSha256Sum property."
++  }
++}
++
++# unzip and move
++Expand-Archive "$TMP_DOWNLOAD_DIR/$distributionUrlName" -DestinationPath "$TMP_DOWNLOAD_DIR" | Out-Null
++Rename-Item -Path "$TMP_DOWNLOAD_DIR/$distributionUrlNameMain" -NewName $MAVEN_HOME_NAME | Out-Null
++try {
++  Move-Item -Path "$TMP_DOWNLOAD_DIR/$MAVEN_HOME_NAME" -Destination $MAVEN_HOME_PARENT | Out-Null
++} catch {
++  if (! (Test-Path -Path "$MAVEN_HOME" -PathType Container)) {
++    Write-Error "fail to move MAVEN_HOME"
++  }
++} finally {
++  try { Remove-Item $TMP_DOWNLOAD_DIR -Recurse -Force | Out-Null }
++  catch { Write-Warning "Cannot remove $TMP_DOWNLOAD_DIR" }
++}
++
++Write-Output "MVN_CMD=$MAVEN_HOME/bin/$MVN_CMD"
+Index: ServiceRegistry/ServiceRegistry/pom.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/ServiceRegistry/ServiceRegistry/pom.xml b/ServiceRegistry/ServiceRegistry/pom.xml
+new file mode 100644
+--- /dev/null	(revision a3588635740a06a8946ec51f6c69167ea2d62060)
++++ b/ServiceRegistry/ServiceRegistry/pom.xml	(revision a3588635740a06a8946ec51f6c69167ea2d62060)
+@@ -0,0 +1,70 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
++	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
++	<modelVersion>4.0.0</modelVersion>
++	<parent>
++		<groupId>org.springframework.boot</groupId>
++		<artifactId>spring-boot-starter-parent</artifactId>
++		<version>3.3.1</version>
++		<relativePath/> <!-- lookup parent from repository -->
++	</parent>
++	<groupId>com.registry</groupId>
++	<artifactId>ServiceRegistry</artifactId>
++	<version>0.0.1-SNAPSHOT</version>
++	<name>ServiceRegistry</name>
++	<description>This is Service Registry</description>
++	<url/>
++	<licenses>
++		<license/>
++	</licenses>
++	<developers>
++		<developer/>
++	</developers>
++	<scm>
++		<connection/>
++		<developerConnection/>
++		<tag/>
++		<url/>
++	</scm>
++	<properties>
++		<java.version>17</java.version>
++		<spring-cloud.version>2023.0.2</spring-cloud.version>
++	</properties>
++	<dependencies>
++		<dependency>
++			<groupId>org.springframework.boot</groupId>
++			<artifactId>spring-boot-starter-web</artifactId>
++		</dependency>
++		<dependency>
++			<groupId>org.springframework.cloud</groupId>
++			<artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
++		</dependency>
++
++		<dependency>
++			<groupId>org.springframework.boot</groupId>
++			<artifactId>spring-boot-starter-test</artifactId>
++			<scope>test</scope>
++		</dependency>
++	</dependencies>
++	<dependencyManagement>
++		<dependencies>
++			<dependency>
++				<groupId>org.springframework.cloud</groupId>
++				<artifactId>spring-cloud-dependencies</artifactId>
++				<version>${spring-cloud.version}</version>
++				<type>pom</type>
++				<scope>import</scope>
++			</dependency>
++		</dependencies>
++	</dependencyManagement>
++
++	<build>
++		<plugins>
++			<plugin>
++				<groupId>org.springframework.boot</groupId>
++				<artifactId>spring-boot-maven-plugin</artifactId>
++			</plugin>
++		</plugins>
++	</build>
++
++</project>
+Index: ServiceRegistry/ServiceRegistry/src/main/java/com/registry/ServiceRegistryApplication.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/ServiceRegistry/ServiceRegistry/src/main/java/com/registry/ServiceRegistryApplication.java b/ServiceRegistry/ServiceRegistry/src/main/java/com/registry/ServiceRegistryApplication.java
+new file mode 100644
+--- /dev/null	(revision a3588635740a06a8946ec51f6c69167ea2d62060)
++++ b/ServiceRegistry/ServiceRegistry/src/main/java/com/registry/ServiceRegistryApplication.java	(revision a3588635740a06a8946ec51f6c69167ea2d62060)
+@@ -0,0 +1,15 @@
++package com.registry;
++
++import org.springframework.boot.SpringApplication;
++import org.springframework.boot.autoconfigure.SpringBootApplication;
++import org.springframework.cloud.netflix.eureka.server.EnableEurekaServer;
++
++@SpringBootApplication
++@EnableEurekaServer
++public class ServiceRegistryApplication {
++
++	public static void main(String[] args) {
++		SpringApplication.run(ServiceRegistryApplication.class, args);
++	}
++
++}
+Index: ServiceRegistry/ServiceRegistry/src/main/resources/application.properties
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>ISO-8859-1
+===================================================================
+diff --git a/ServiceRegistry/ServiceRegistry/src/main/resources/application.properties b/ServiceRegistry/ServiceRegistry/src/main/resources/application.properties
+new file mode 100644
+--- /dev/null	(revision a3588635740a06a8946ec51f6c69167ea2d62060)
++++ b/ServiceRegistry/ServiceRegistry/src/main/resources/application.properties	(revision a3588635740a06a8946ec51f6c69167ea2d62060)
+@@ -0,0 +1,7 @@
++server.port=8761
++spring.application.name=SERVICE-REGISTRY
++
++#disable as client
++eureka.client.register-with-eureka=false
++
++eureka.client.fetch-registry=false
+Index: ServiceRegistry/ServiceRegistry/src/test/java/com/registry/ServiceRegistryApplicationTests.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/ServiceRegistry/ServiceRegistry/src/test/java/com/registry/ServiceRegistryApplicationTests.java b/ServiceRegistry/ServiceRegistry/src/test/java/com/registry/ServiceRegistryApplicationTests.java
+new file mode 100644
+--- /dev/null	(revision a3588635740a06a8946ec51f6c69167ea2d62060)
++++ b/ServiceRegistry/ServiceRegistry/src/test/java/com/registry/ServiceRegistryApplicationTests.java	(revision a3588635740a06a8946ec51f6c69167ea2d62060)
+@@ -0,0 +1,13 @@
++package com.registry;
++
++import org.junit.jupiter.api.Test;
++import org.springframework.boot.test.context.SpringBootTest;
++
++@SpringBootTest
++class ServiceRegistryApplicationTests {
++
++	@Test
++	void contextLoads() {
++	}
++
++}
+diff --git a/QuestionService.zip b/QuestionService.zip
+new file mode 100644
+index 0000000000000000000000000000000000000000..4fc96d5a8cc6aa1abc50c082cb33a7cd4470f097
+GIT binary patch
+literal 14977
+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
+
+diff --git a/QuizService.zip b/QuizService.zip
+new file mode 100644
+index 0000000000000000000000000000000000000000..82dd6c61610924e3bcaf01e25cd2acce24f5850f
+GIT binary patch
+literal 14734
+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
+
+diff --git a/ServiceRegistry.zip b/ServiceRegistry.zip
+new file mode 100644
+index 0000000000000000000000000000000000000000..256392f7c5952c492e1b53c7ec398d0060c007f7
+GIT binary patch
+literal 14998
+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
+
